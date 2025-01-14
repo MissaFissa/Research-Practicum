@@ -1,10 +1,7 @@
 import numpy as np
-import data
+from data_gathering import DataGathering
 
-NA = 0.39
-n_water = 1.33
-n_air = 1.0
-
+data = DataGathering()
 df200 = data.df_200
 df400 = data.df_400
 dict200 = data.dict_200
@@ -48,14 +45,14 @@ IL_400_6ms_15deg_dark = df400[dict400[6]]
 
 def eta_lim(n_sample):
 
-    return (NA / n_sample) ** 2
+    return (data.NA / n_sample) ** 2
 
 def refraction(R_ref, I_sample, I_sample_back, I_ref, I_ref_back):
 
     return R_ref * ((I_sample - I_sample_back) / (I_ref - I_ref_back))
 
-eta_lim_air = eta_lim(n_air)
-eta_lim_water = eta_lim(n_water)
+eta_lim_air = eta_lim(data.n_air)
+eta_lim_water = eta_lim(data.n_water)
 
 def ratio_time(times, a, b):
 
@@ -91,8 +88,6 @@ cor_R_IL_400_0deg_water = refraction(eta_lim_water, IL_400_6ms_0deg, IL_400_6ms_
 R_IL_400_0deg_water = refraction(eta_lim_water, IL_400_6ms_0deg, IL_400_6ms_0deg_dark, water_400_107ms_0deg, water_400_107ms_0deg_dark)
 R_IL_400_15deg_water = refraction(eta_lim_water, IL_400_6ms_15deg, IL_400_6ms_15deg_dark, water_400_2000ms_15deg, water_400_2000ms_15deg_dark)
 
-print(cor_R_IL_400_0deg_water[0:10])
-print(R_IL_400_0deg_water[0:10])
 
 R_IL_200_0deg_water = refraction(eta_lim_water, IL_200_5ms_0deg, IL_200_5ms_0deg_dark, water_200_73ms_0deg, water_200_73ms_0deg_dark)
 R_IL_200_15deg_water = refraction(eta_lim_water, IL_200_5ms_15deg, IL_200_5ms_15deg_dark, water_200_1600ms_15deg, water_200_1600ms_15deg_dark)

@@ -60,3 +60,4 @@ class DataGathering:
         self.corrected_IL_200_5ms_0deg = self.IL_200_5ms_0deg - self.IL_200_5ms_15deg_dark
         self.corrected_IL_200_5ms_15deg = self.IL_200_5ms_15deg - self.IL_200_5ms_15deg_dark
 
+        
