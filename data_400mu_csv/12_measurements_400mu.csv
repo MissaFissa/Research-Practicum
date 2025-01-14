@@ -1,5 +1,5 @@
 Filename-->;fres400_280ms_15deg.RAW8;fres400_280ms_15deg_dark.RAW8;fres400_6ms.RAW8;fres400_6ms_dark.RAW8;IL400_5.5ms_15deg.RAW8;IL400_5.5ms_15deg_dark.RAW8;IL400_6ms.RAW8;IL400_6ms_dark.RAW8;water400_107ms.RAW8;water400_107ms_dark.RAW8;water400_2s_15deg.RAW8;water400_2s_15deg_dark.RAW8
-Mode/Unit-->;;;;;;;;;;;;
+Mode/Unit-->;;;;;;;;;;;;;
 Int.time[ms]-->;280,3145447;280,3145447;6,476144314;6,476144314;5,549795628;5,549795628;6,034845829;6,034845829;107,0538025;107,0538025;2024,007935;2024,007935
 NrOfAverages-->;2;2;77;77;90;90;83;83;5;5;1;1
 Smoothing-->;0;0;0;0;0;0;0;0;0;0;0;0
