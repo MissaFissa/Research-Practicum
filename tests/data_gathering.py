@@ -114,9 +114,10 @@ class DataGathering:
 
         for i in range(400,len(self.df_400)):
 
-            d_400 = ((self.scaled_400_light[0][i] - self.scaled_400_dark[0][i]) / (self.scaled_400[5][i] - self.scaled_400_dark[5][i]))
-            d_200 = ((self.scaled_200_light[0][i] - self.scaled_200_dark[0][i]) / (self.scaled_200[5][i] - self.scaled_200_dark[5][i]))
-
+            d_400 = ((self.scaled_400_light[0][i] - self.scaled_400_dark[0][i]) / (self.scaled_400_light[5][i] - self.scaled_400_dark[5][i]))
+            d_200 = ((self.scaled_200_light[0][i] - self.scaled_200_dark[0][i]) / (self.scaled_200_light[5][i] - self.scaled_200_dark[5][i]))
+            
+    
             # d_400 = ((self.unscaled_400_light[0][i] - self.unscaled_400_dark[0][i]) / (self.unscaled_400_light[5][i] - self.unscaled_400_dark[5][i]))
             # d_200 = ((self.unscaled_200_light[0][i] - self.unscaled_200_dark[0][i]) / (self.unscaled_200_light[5][i] - self.unscaled_200_dark[5][i]))
 
@@ -132,10 +133,6 @@ class DataGathering:
             self.n_eff_negative_200.append(a_negative_200)
 
 data = DataGathering()
-data.background_correction()
+# data.background_correction()
 data.scale()
 data.effective_index()
-
- # print(data.df_400[data.good_400[0]][0:3])
-# print(data.df_400[data.dark_400[0]][0:3])
-# print(data.corrected_400[0][0:3])
