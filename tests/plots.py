@@ -1,7 +1,12 @@
 import matplotlib.pyplot as plt 
 import numpy as np
-import data
+from data_gathering import DataGathering
 import analysis
+
+data = DataGathering()
+data.scale()
+data.background_correction()
+data.effective_index()
 
 fig1, axs1 = plt.subplots(2, 1, figsize=(10, 8))
 
@@ -49,45 +54,47 @@ axs2[1,1].plot(analysis.wavelengths, analysis.IL_200_5ms_0deg)
 plt.setp(axs2[0,0], xlim=(400,1100), ylim=(0,0.3))
 plt.setp(axs2[1,0], xlim=(400,1100), ylim=(0,0.3))
 
-
-
-
 fig3, axs3 = plt.subplots(2, 2, figsize=(10, 8))
 
-axs3[0,0].plot(analysis.wavelengths, analysis.R_IL_400_0deg_water)
-axs3[0,1].plot(analysis.wavelengths, analysis.R_IL_400_15deg_water)
+for i in range(len(data.scaled_400_light)):
 
-axs3[1,0].plot(analysis.wavelengths, analysis.R_IL_400_15deg_water)
-axs3[1,1].plot(analysis.wavelengths, analysis.R_IL_200_15deg_water)
+    axs3[0,0].plot(analysis.wavelengths, data.scaled_400_light[i])
+    axs3[0,1].plot(analysis.wavelengths, data.scaled_200_light[i])
 
-plt.setp(axs3, xlim=(400,1100), ylim=(0,0.3))
+    axs3[1,0].plot(analysis.wavelengths, data.unscaled_400_light[i], label = f'{data.good_400[i]}')
+    axs3[1,1].plot(analysis.wavelengths, data.unscaled_200_light[i])
 
-fig4 = plt.figure()
-gs = fig4.add_gridspec(2, 2, hspace=0, wspace=0)
-axs4 = gs.subplots(sharex=True, sharey=True)
+fig3.legend(bbox_to_anchor=[0.5,0.93], loc='center', ncol=2)
 
-axs4[0,0].plot(analysis.wavelengths, analysis.R_IL_400_0deg_water)
-axs4[0,1].plot(analysis.wavelengths, analysis.cor_R_IL_400_0deg_water)
+fig4, axs4 = plt.subplots(2, 2, figsize=(10, 8))
 
-# axs4[0,1].plot(analysis.wavelengths, analysis.R_IL_400_15deg_water)
+major_ticks_x_4 = np.arange(150, 1150, 50)
+minor_ticks_x_4 = np.arange(150, 1150, 10)
+major_ticks_y_4 = np.arange(0, 75000, 5000)
+minor_ticks_y_4 = np.arange(0, 75000, 1000)
 
-axs4[1,0].plot(analysis.wavelengths, analysis.R_IL_400_15deg_water)
-axs4[1,1].plot(analysis.wavelengths, analysis.R_IL_200_15deg_water)
+axs4[0,0].plot(data.wavelengths_400nm, data.n_eff_positive_400)
+axs4[0,1].plot(data.wavelengths_400nm, data.n_eff_negative_400)
 
-# plt.setp(axs4, xlim=(400,1100), ylim=(0,0.3))
+axs4[1,0].plot(data.wavelengths_400nm, data.n_eff_positive_200)
+axs4[1,1].plot(data.wavelengths_400nm, data.n_eff_negative_200)
 
-fig5, axs5 = plt.subplots(2, 2, figsize=(10, 8))
+axs4[0,0].title.set_text('$+n_{eff}$  $400\\mu$')
+axs4[0,1].title.set_text('$-n_{eff}$  $400\\mu$')
+axs4[1,0].title.set_text('$+n_{eff}$  $200\\mu$')
+axs4[1,1].title.set_text('$-n_{eff}$  $200\\mu$')
 
-axs5[0,0].plot(analysis.wavelengths, analysis.fresnel_400_6ms_0deg)
-axs5[0,1].plot(analysis.wavelengths, analysis.IL_400_6ms_0deg)
+plt.setp(axs4[0,0], xlim=(400,1100), ylim=(-3,3))
+plt.setp(axs4[0,1], xlim=(400,1100))
+plt.setp(axs4[1,0], xlim=(400,1100))
+plt.setp(axs4[1,1], xlim=(400,1100))
 
-axs5[1,0].plot(analysis.wavelengths, analysis.fresnel_200_5ms_0deg)
-axs5[1,1].plot(analysis.wavelengths, analysis.IL_200_5ms_0deg)
+plt.tight_layout()
 
-# plt.close(fig1)
+plt.close(fig1)
 plt.close(fig2)
-plt.close(fig3)
+# plt.close(fig3)
 plt.close(fig4)
-# plt.close(fig5)
+
 
 plt.show()
