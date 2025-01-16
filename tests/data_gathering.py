@@ -22,14 +22,35 @@ class DataGathering:
         self.good_200 = []
         self.dark_400 = []
         self.good_400 = []
+        self.n_eff_positive_400_15deg = []
+        self.n_eff_negative_400_15deg = []
+        self.n_eff_positive_200_15deg = []
+        self.n_eff_negative_200_15deg = []
+        self.n_eff_positive_400_unscaled_15deg = []
+        self.n_eff_negative_400_unscaled_15deg = []
+        self.n_eff_positive_200_unscaled_15deg = []
+        self.n_eff_negative_200_unscaled_15deg = []
+        self.n_eff_positive_400_0deg = []
+        self.n_eff_negative_400_0deg = []
+        self.n_eff_positive_200_0deg = []
+        self.n_eff_negative_200_0deg = []
+        self.n_eff_positive_400_unscaled_0deg = []
+        self.n_eff_negative_400_unscaled_0deg = []
+        self.n_eff_positive_200_unscaled_0deg = []
+        self.n_eff_negative_200_unscaled_0deg = []
+        self.n_eff_400_15deg_test = []
+        self.n_eff_400_0deg_test = []
+        self.n_eff_200_15deg_test = []
+        self.n_eff_200_0deg_test = []
+        self.n_eff_400_unscaled_15deg_test = []
+        self.n_eff_400_unscaled_0deg_test = []
+        self.n_eff_200_unscaled_15deg_test = []
+        self.n_eff_200_unscaled_0deg_test = []
+        self.n_eff_test = []
         self.NA = 0.39
-        self.n_eff_positive_400 = []
-        self.n_eff_negative_400 = []
-        self.n_eff_positive_200 = []
-        self.n_eff_negative_200 = []
         self.n_water = 1.33
         self.n_air = 1.0
-        self.t_reference = 5
+        self.t_reference = 6
         self.unscaled_400 = []
         self.unscaled_400_light = []
         self.unscaled_400_dark = []
@@ -114,25 +135,45 @@ class DataGathering:
 
         for i in range(400,len(self.df_400)):
 
-            d_400 = ((self.scaled_400_light[0][i] - self.scaled_400_dark[0][i]) / (self.scaled_400_light[5][i] - self.scaled_400_dark[5][i]))
-            d_200 = ((self.scaled_200_light[0][i] - self.scaled_200_dark[0][i]) / (self.scaled_200_light[5][i] - self.scaled_200_dark[5][i]))
+            a_400_15_deg = ((self.scaled_400_light[0][i] - self.scaled_400_dark[0][i]) / (self.scaled_400_light[5][i] - self.scaled_400_dark[5][i])) ** 0.5
+            a_400_0_deg = ((self.scaled_400_light[1][i] - self.scaled_400_dark[1][i]) / (self.scaled_400_light[4][i] - self.scaled_400_dark[4][i])) ** 0.5
+
+            n_eff_400_15deg = ((-1 * (c - b + a_400_15_deg * (c - b)) - ((c - b + a_400_15_deg * (c - b)) ** 2 + (4 * b * c * ((1 - a_400_15_deg) ** 2))) ** 0.5) / (2 * (1 - a_400_15_deg)))
+            n_eff_400_0deg = ((-1 * (c - b + a_400_0_deg * (c - b)) - ((c - b + a_400_0_deg * (c - b)) ** 2 + (4 * b * c * ((1 - a_400_0_deg) ** 2))) ** 0.5) / (2 * (1 - a_400_0_deg)))
+
+            self.n_eff_400_15deg_test.append(n_eff_400_15deg)
+            self.n_eff_400_0deg_test.append(n_eff_400_0deg)
+
+            a_200_15_deg = ((self.scaled_200_light[0][i] - self.scaled_200_dark[0][i]) / (self.scaled_200_light[5][i] - self.scaled_200_dark[5][i])) ** 0.5
+            a_200_0_deg = ((self.scaled_200_light[1][i] - self.scaled_200_dark[1][i]) / (self.scaled_200_light[4][i] - self.scaled_200_dark[4][i])) ** 0.5
+
+            n_eff_200_15deg = ((-1 * (c - b + a_200_15_deg * (c - b)) - ((c - b + a_200_15_deg * (c - b)) ** 2 + (4 * b * c * ((1 - a_200_15_deg) ** 2))) ** 0.5) / (2 * (1 - a_200_15_deg)))
+            n_eff_200_0deg = ((-1 * (c - b + a_200_0_deg * (c - b)) - ((c - b + a_200_0_deg * (c - b)) ** 2 + (4 * b * c * ((1 - a_200_0_deg) ** 2))) ** 0.5) / (2 * (1 - a_200_0_deg)))
+
+            self.n_eff_200_15deg_test.append(n_eff_200_15deg)
+            self.n_eff_200_0deg_test.append(n_eff_200_0deg)
             
-    
-            # d_400 = ((self.unscaled_400_light[0][i] - self.unscaled_400_dark[0][i]) / (self.unscaled_400_light[5][i] - self.unscaled_400_dark[5][i]))
-            # d_200 = ((self.unscaled_200_light[0][i] - self.unscaled_200_dark[0][i]) / (self.unscaled_200_light[5][i] - self.unscaled_200_dark[5][i]))
+            a_400_15_deg_unscaled = ((self.unscaled_400_light[0][i] - self.unscaled_400_dark[0][i]) / (self.unscaled_400_light[5][i] - self.unscaled_400_dark[5][i])) ** 0.5
+            a_400_0_deg_unscaled = ((self.unscaled_400_light[1][i] - self.unscaled_400_dark[1][i]) / (self.unscaled_400_light[4][i] - self.unscaled_400_dark[4][i])) ** 0.5
 
+            n_eff_400_15deg_unscaled = ((-1 * (c - b + a_400_15_deg_unscaled * (c - b)) - ((c - b + a_400_15_deg_unscaled * (c - b)) ** 2 + (4 * b * c * ((1 - a_400_15_deg_unscaled) ** 2))) ** 0.5) / (2 * (1 - a_400_15_deg_unscaled)))
+            n_eff_400_0deg_unscaled = ((-1 * (c - b + a_400_0_deg_unscaled * (c - b)) - ((c - b + a_400_0_deg_unscaled * (c - b)) ** 2 + (4 * b * c * ((1 - a_400_0_deg_unscaled) ** 2))) ** 0.5) / (2 * (1 - a_400_0_deg_unscaled)))
 
-            a_positive_400 = ((b - c) * (1 + np.sqrt(d_400)) + np.sqrt(((c - b) * (1 + np.sqrt(d_400))) ** 2) + 4 * b * c * (1 - np.sqrt(d_400)) ** 2) / (2 * (1 - np.sqrt(d_400)))
-            a_negative_400 = ((b - c) * (1 - np.sqrt(d_400)) - np.sqrt(((c - b) * (1 - np.sqrt(d_400))) ** 2) + 4 * b * c * (1 + np.sqrt(d_400)) ** 2) / (2 * (1 + np.sqrt(d_400)))
-            self.n_eff_positive_400.append(a_positive_400)
-            self.n_eff_negative_400.append(a_negative_400)
+            self.n_eff_400_unscaled_15deg_test.append(n_eff_400_15deg_unscaled)
+            self.n_eff_400_unscaled_0deg_test.append(n_eff_400_0deg_unscaled)
 
-            a_positive_200 = ((b - c) * (1 + np.sqrt(d_200)) + np.sqrt(((c - b) * (1 + np.sqrt(d_200))) ** 2) + 4 * b * c * (1 - np.sqrt(d_200)) ** 2) / (2 * (1 - np.sqrt(d_200)))
-            a_negative_200 = ((b - c) * (1 - np.sqrt(d_200)) - np.sqrt(((c - b) * (1 - np.sqrt(d_200))) ** 2) + 4 * b * c * (1 + np.sqrt(d_200)) ** 2) / (2 * (1 + np.sqrt(d_200)))
-            self.n_eff_positive_200.append(a_positive_200)
-            self.n_eff_negative_200.append(a_negative_200)
+            a_200_15_deg_unscaled = ((self.unscaled_200_light[0][i] - self.unscaled_200_dark[0][i]) / (self.unscaled_200_light[5][i] - self.unscaled_200_dark[5][i])) ** 0.5
+            a_200_0_deg_unscaled = ((self.unscaled_200_light[1][i] - self.unscaled_200_dark[1][i]) / (self.unscaled_200_light[4][i] - self.unscaled_200_dark[4][i])) ** 0.5
 
+            n_eff_200_15deg_unscaled = ((-1 * (c - b + a_200_15_deg_unscaled * (c - b)) - ((c - b + a_200_15_deg_unscaled * (c - b)) ** 2 + (4 * b * c * ((1 - a_200_15_deg_unscaled) ** 2))) ** 0.5) / (2 * (1 - a_200_15_deg_unscaled)))
+            n_eff_200_0deg_unscaled = ((-1 * (c - b + a_200_0_deg_unscaled * (c - b)) - ((c - b + a_200_0_deg_unscaled * (c - b)) ** 2 + (4 * b * c * ((1 - a_200_0_deg_unscaled) ** 2))) ** 0.5) / (2 * (1 - a_200_0_deg_unscaled)))
+
+            self.n_eff_200_unscaled_15deg_test.append(n_eff_200_15deg_unscaled)
+            self.n_eff_200_unscaled_0deg_test.append(n_eff_200_0deg_unscaled)
+            
 data = DataGathering()
-# data.background_correction()
+data.background_correction()
 data.scale()
-data.effective_index()
+data.effective_index_15deg()
+data.effective_index_0deg()
+data.test_effective_index_15deg()
