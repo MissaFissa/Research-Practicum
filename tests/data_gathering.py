@@ -13,6 +13,10 @@ class DataGathering:
         self.wavelengths_water = self.df_water[self.dict_water[0]].astype(float)
         self.indices_water = self.df_water[self.dict_water[1]].astype(float)
 
+        self.df_experiment = pd.read_csv(f'{cwd}/data/data_experiment/experiment.csv', sep=';', skiprows=[0,1,2,3,4], header=[0], decimal=',')
+        self.info_experiment = pd.read_csv(f'{cwd}/data/data_experiment/experiment.csv', sep=';', index_col=0, nrows=2, skiprows=[1,4], decimal=',')
+        self.dict_experiment = dict(enumerate(self.df_experiment))
+
         self.df_400 = pd.read_csv(f'{cwd}/data/data_400mu_csv/12_measurements_400mu.csv', sep=';', skiprows=[0,1,2,3,4], header=[0], decimal=',')
         self.info_400 = pd.read_csv(f'{cwd}/data/data_400mu_csv/12_measurements_400mu.csv', sep=';', index_col=0, nrows=2, skiprows=[1,4], decimal=',')
         self.dict_400 = dict(enumerate(self.df_400))
@@ -106,11 +110,10 @@ class DataGathering:
     def effective_index(self):
 
         b = self.n_air
-        c = self.n_water
 
         for i in range(len(self.scaled_400[0])):
             
-            # c = self.water_indices[i]
+            c = self.water_indices[i]
 
             a_400_15_deg = (self.scaled_400[0][i] / self.scaled_400[5][i]) ** 0.5
             a_400_0_deg = (self.scaled_400[1][i] / self.scaled_400[4][i]) ** 0.5
@@ -128,9 +131,3 @@ class DataGathering:
 
             self.n_eff_200_15deg.append(n_eff_200_15deg)
             self.n_eff_200_0deg.append(n_eff_200_0deg)
-
-data = DataGathering()
-data.background_correction()
-data.scale()
-data.sellmeier()
-data.effective_index()

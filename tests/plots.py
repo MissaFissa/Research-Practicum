@@ -5,7 +5,7 @@ from data_gathering import DataGathering
 data = DataGathering()
 data.background_correction()
 data.scale()
-data.sellmeier()
+# data.sellmeier()
 data.effective_index()
 
 plt.rcParams.update({'font.size': 8})
