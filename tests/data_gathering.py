@@ -141,15 +141,14 @@ class DataExperiment:
         self.df_experiment = pd.read_csv(f'{cwd}/data/data_experiment/experiment.csv', sep=';', skiprows=[0,1,2,3,4], header=[0], decimal=',')
         self.info_experiment = pd.read_csv(f'{cwd}/data/data_experiment/experiment.csv', sep=';', index_col=0, nrows=2, skiprows=[1,4], decimal=',')
         self.dict_experiment = dict(enumerate(self.df_experiment))
-
-        self.df_400_experiment = []
-        self.df_200_experiment = []
-        self.dict_400_experiment = None
-        self.dict_200_experiment = None
+        self.df_200_experiment = self.df_experiment.iloc[:, [ i for i in range(1, (len(self.dict_experiment) // 2) + 1)]]
+        self.df_400_experiment = self.df_experiment.iloc[:, (len(self.dict_experiment) // 2) + 1:]
+        self.dict_400_experiment = dict(enumerate(self.df_400_experiment))
+        self.dict_200_experiment = dict(enumerate(self.df_200_experiment))
 
         self.t_experiment = list(dict.fromkeys(self.info_experiment.iloc[0]))
 
-        self.n_eff_200_15deg_experiment = []
+        self.n_eff_400_15deg_experiment = []
         self.n_eff_200_15deg_experiment = []
 
         self.scaled_400_experiment = []
@@ -176,27 +175,6 @@ class DataExperiment:
 
     def background_correction(self):
 
-        dict_200_experiment = {}
-        dict_400_experiment = {}
-
-        for i in range(1,len(self.dict_experiment)):
-
-            if '200' in self.dict_experiment[i]:
-
-                dict_200_experiment[i] = (self.dict_experiment[i])
-
-            else:
-
-                dict_400_experiment[i] = (self.dict_experiment[i])
-
-        self.dict_200_experiment = {i: v for i, v in enumerate(dict_200_experiment.values())}
-        self.dict_400_experiment = {i: v for i, v in enumerate(dict_400_experiment.values())}
-
-        for i in range(len(self.dict_200_experiment)):
-
-            self.df_400_experiment.append(self.df_experiment[self.dict_400_experiment[i]])
-            self.df_200_experiment.append(self.df_experiment[self.dict_200_experiment[i]])
-
         for i in range(len(self.dict_400_experiment)):
 
             if 'dark' in self.dict_400_experiment[i]:
@@ -217,10 +195,18 @@ class DataExperiment:
             corrected_400_experiment_temp = []
             corrected_200_experiment_temp = []
 
-            for j in range(self.index_wl400nm, len(self.df_experiment)):
+            # for j in range(self.index_wl400nm, len(self.df_experiment)):
 
-                corrected_400_experiment = self.df_experiment[self.good_400_experiment[i]][j] - self.df_experiment[self.dark_400_experiment[i]][j]
-                corrected_200_experiment = self.df_experiment[self.good_200_experiment[i]][j] - self.df_experiment[self.dark_200_experiment[i]][j]
+            #     corrected_400_experiment = self.df_experiment[self.good_400_experiment[i]][j] - self.df_experiment[self.dark_400_experiment[i]][j]
+            #     corrected_200_experiment = self.df_experiment[self.good_200_experiment[i]][j] - self.df_experiment[self.dark_200_experiment[i]][j]
+
+            #     corrected_400_experiment_temp.append(corrected_400_experiment)
+            #     corrected_200_experiment_temp.append(corrected_200_experiment)
+
+            for j in range(self.index_wl400nm, len(self.df_400_experiment)):
+
+                corrected_400_experiment = self.df_400_experiment[self.good_400_experiment[i]][j] - self.df_400_experiment[self.dark_400_experiment[i]][j]
+                corrected_200_experiment = self.df_200_experiment[self.good_200_experiment[i]][j] - self.df_200_experiment[self.dark_200_experiment[i]][j]
 
                 corrected_400_experiment_temp.append(corrected_400_experiment)
                 corrected_200_experiment_temp.append(corrected_200_experiment)
@@ -231,45 +217,58 @@ class DataExperiment:
         self.corrected_400_experiment_array = np.array(self.corrected_400_experiment)
         self.corrected_200_experiment_array = np.array(self.corrected_200_experiment)
 
-    # def scale(self):
+    def scale(self):
 
-    #     for i in range(len(self.corrected_400)):
+        for i in range(len(self.corrected_400_experiment)):
 
-    #         scale_factor_400 = self.t_reference / self.t_400[i]
-    #         scale_factor_200 = self.t_reference / self.t_200[i]
+            # scale_factor_400_experiment = self.t_reference / self.t_experiment[:len(self.t_experiment) // 2][i]
+            # scale_factor_200_experiment = self.t_reference / self.t_experiment[len(self.t_experiment) // 2:][i]
+            scale_factor_400_experiment = self.t_reference / self.t_experiment[:len(self.t_experiment) // 2][i]
+            scale_factor_200_experiment = self.t_reference / self.t_experiment[len(self.t_experiment) // 2:][i]
             
-    #         self.scaled_400.append(scale_factor_400 * self.corrected_400_array[i])
-    #         self.scaled_200.append(scale_factor_200 * self.corrected_200_array[i])
+            self.scaled_400_experiment.append(scale_factor_400_experiment * self.corrected_400_experiment_array[i])
+            self.scaled_200_experiment.append(scale_factor_200_experiment * self.corrected_200_experiment_array[i])
 
-    # def sellmeier(self):
+    def sellmeier(self):
         
-    #     for wl in self.wavelengths_400nm / 1000:
+        for wl in self.wavelengths_400nm / 1000:
             
-    #         n = (1 + ((self.B1 * wl ** 2) / (wl ** 2 - self.C1)) + ((self.B2 * wl ** 2) / (wl ** 2 - self.C2))) ** 0.5
+            n = (1 + ((self.B1 * wl ** 2) / (wl ** 2 - self.C1)) + ((self.B2 * wl ** 2) / (wl ** 2 - self.C2))) ** 0.5
             
-    #         self.water_indices.append(n)
+            self.water_indices.append(n)
 
     # def effective_index(self):
 
     #     b = self.n_air
 
-    #     for i in range(len(self.scaled_400[0])):
+    #     for i in range(len(self.scaled_400_experiment[0])):
             
     #         c = self.water_indices[i]
 
-    #         a_400_15_deg = (self.scaled_400[0][i] / self.scaled_400[5][i]) ** 0.5
-    #         a_400_0_deg = (self.scaled_400[1][i] / self.scaled_400[4][i]) ** 0.5
+    #         a_400_15_deg = (self.scaled_400_experiment[0][i] / self.scaled_400_experiment[5][i]) ** 0.5
     #         n_eff_400_15deg = ((-1 * (c - b + a_400_15_deg * (c - b)) - ((c - b + a_400_15_deg * (c - b)) ** 2 + (4 * b * c * ((1 - a_400_15_deg) ** 2))) ** 0.5) / (2 * (1 - a_400_15_deg)))
-    #         n_eff_400_0deg = ((-1 * (c - b + a_400_0_deg * (c - b)) - ((c - b + a_400_0_deg * (c - b)) ** 2 + (4 * b * c * ((1 - a_400_0_deg) ** 2))) ** 0.5) / (2 * (1 - a_400_0_deg)))
 
-    #         self.n_eff_400_15deg.append(n_eff_400_15deg)
-    #         self.n_eff_400_0deg.append(n_eff_400_0deg)
+    #         self.n_eff_400_15deg_experiment.append(n_eff_400_15deg)
 
-    #         a_200_15_deg = (self.scaled_200[0][i] / self.scaled_200[5][i]) ** 0.5
-    #         a_200_0_deg = (self.scaled_200[1][i] / self.scaled_200[4][i]) ** 0.5
+    #         a_200_15_deg = (self.scaled_200_experiment[0][i] / self.scaled_200_experiment[5][i]) ** 0.5
 
     #         n_eff_200_15deg = ((-1 * (c - b + a_200_15_deg * (c - b)) - ((c - b + a_200_15_deg * (c - b)) ** 2 + (4 * b * c * ((1 - a_200_15_deg) ** 2))) ** 0.5) / (2 * (1 - a_200_15_deg)))
-    #         n_eff_200_0deg = ((-1 * (c - b + a_200_0_deg * (c - b)) - ((c - b + a_200_0_deg * (c - b)) ** 2 + (4 * b * c * ((1 - a_200_0_deg) ** 2))) ** 0.5) / (2 * (1 - a_200_0_deg)))
 
-    #         self.n_eff_200_15deg.append(n_eff_200_15deg)
-    #         self.n_eff_200_0deg.append(n_eff_200_0deg)
+    #         self.n_eff_200_15deg_experiment.append(n_eff_200_15deg)
+
+test = DataTests()
+test.background_correction()
+test.scale()
+test.sellmeier()
+test.effective_index()
+
+data = DataExperiment()
+data.background_correction()
+data.scale()
+data.sellmeier()
+# data.effective_index()
+
+# print(test.scaled_400)
+print(len(data.scaled_400_experiment))
+print(data.dict_400_experiment)
+# print(data.scaled_200_experiment)
