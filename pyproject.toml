@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "research practicum"
+name = "research_practicum"
 version = "0.1.0"
 description = ""
 authors = ["MissaFissa <meho11@outlook.com>"]
@@ -11,8 +11,12 @@ numpy = "^2.2.1"
 matplotlib = "^3.10.0"
 pandas = "^2.2.3"
 pyqtgraph = "^0.13.7"
-
+click = "^8.1.8"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+bellyfat = "research_practicum.view:plot_bellyfat"
+calibration = "research_practicum.view:plot_calibration"
