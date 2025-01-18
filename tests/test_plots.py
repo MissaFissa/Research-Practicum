@@ -1,9 +1,8 @@
 import matplotlib.pyplot as plt 
 import numpy as np
-from data_gathering import *
+from data_gathering import DataTests, DataExperiment
 
-data = DataCalibration()
-data.split_dataframe()
+data = DataTests()
 data.background_correction()
 data.scale()
 data.sellmeier()
@@ -26,7 +25,7 @@ minor_ticks_y = np.arange(0, 75000, 1000)
 axs1[0].set_prop_cycle('color', plt.cm.jet(np.linspace(0, 1, 12)))
 axs1[1].set_prop_cycle('color', plt.cm.jet(np.linspace(0, 1, 12)))
 
-for i in range(1,len(data.dict_400)):
+for i in range(1,13):
 
     axs1[0].plot(data.df_400[data.dict_400[0]], data.df_400[data.dict_400[i]], label=f'{data.dict_400[i]}')
     axs1[1].plot(data.df_200[data.dict_200[0]], data.df_200[data.dict_200[i]], label=f'{data.dict_200[i]}')
@@ -80,17 +79,20 @@ for ax in axs2.flatten():
 plt.tight_layout()
 plt.margins(0)
 
-fig3, axs3 = plt.subplots(2, 1, figsize=(14, 8), facecolor='whitesmoke')
+fig3, axs3 = plt.subplots(2, 2, figsize=(14, 8), facecolor='whitesmoke')
 
-axs3[0].plot(data.wavelengths_400nm, data.n_eff_400_15deg, c='dodgerblue', ls='dotted')
-axs3[1].plot(data.wavelengths_400nm, data.n_eff_200_15deg, c='dodgerblue', ls='dotted')
+axs3[0,0].plot(data.wavelengths_400nm, data.n_eff_400_15deg, c='dodgerblue', ls='dotted')
+axs3[0,1].plot(data.wavelengths_400nm, data.n_eff_400_0deg, c='dodgerblue', ls='dotted')
+
+axs3[1,0].plot(data.wavelengths_400nm, data.n_eff_200_15deg, c='dodgerblue', ls='dotted')
+axs3[1,1].plot(data.wavelengths_400nm, data.n_eff_200_0deg, c='dodgerblue', ls='dotted')
 
 major_ticks_x_3 = np.arange(400, 950, 50)
 minor_ticks_x_3 = np.arange(400, 950, 10)
 # major_ticks_y_3 = np.arange(0, 75000, 5000)
 # minor_ticks_y_3 = np.arange(0, 75000, 1000)
 
-for ax in axs3:
+for ax in axs3.flatten():
 
     ax.set_xlabel('Wavelength [nm]')
     ax.set_ylabel('Calculated effectice index')
@@ -106,10 +108,12 @@ for ax in axs3:
     # ax.set_ylim(0, 70000)
     ax.set_facecolor('dimgrey')
 
-axs3[0].title.set_text('$15\\degree$ $400\\mu$')
-axs3[1].title.set_text('$15\\degree$ $200\\mu$')
+axs3[0,0].title.set_text('$15\\degree$ $400\\mu$')
+axs3[0,1].title.set_text('$0\\degree$ $400\\mu$')
+axs3[1,0].title.set_text('$15\\degree$ $200\\mu$')
+axs3[1,1].title.set_text('$0\\degree$ $200\\mu$')
 
-fig3.suptitle(' Calibration experiment ', fontsize=20)
+fig3.suptitle(' Test Measurements ', fontsize=20)
 plt.tight_layout()
 plt.margins(0)
 
@@ -176,7 +180,7 @@ plt.margins(0)
 
 plt.close(fig1)
 plt.close(fig2)
-# plt.close(fig3)
+plt.close(fig3)
 plt.close(fig4)
 plt.close(fig5)
 

@@ -272,8 +272,8 @@ class DataExperiment:
         self.dict_water = dict(enumerate(self.df_water))
         self.wavelengths_water = self.df_water[self.dict_water[0]].astype(float)
         self.indices_water = self.df_water[self.dict_water[1]].astype(float)
-        self.df_experiment = pd.read_csv(f'{cwd}/data/data_experiment/experiment_bellyfat.csv', sep=';', skiprows=[0,1,2,3,4], header=[0], decimal=',')
-        self.info_experiment = pd.read_csv(f'{cwd}/data/data_experiment/experiment_bellyfat.csv', sep=';', index_col=0, nrows=2, skiprows=[1,4], decimal=',')
+        self.df_experiment = pd.read_csv(f'{cwd}/data/data_experiment/bellyfat.csv', sep=';', skiprows=[0,1,2,3,4], header=[0], decimal=',')
+        self.info_experiment = pd.read_csv(f'{cwd}/data/data_experiment/bellyfat.csv', sep=';', index_col=0, nrows=2, skiprows=[1,4], decimal=',')
         self.dict_experiment = dict(enumerate(self.df_experiment))
         self.df_200_experiment = self.df_experiment.iloc[:, [ i for i in range(1, (len(self.dict_experiment) // 2) + 1)]]
         self.df_400_experiment = self.df_experiment.iloc[:, (len(self.dict_experiment) // 2) + 1:]
@@ -343,19 +343,18 @@ class DataExperiment:
 
         for i in range(len(self.corrected_400_experiment)):
 
-            scale_factor_400_experiment = self.t_reference / self.t_experiment[:len(self.t_experiment) // 2][i]
-            scale_factor_200_experiment = self.t_reference / self.t_experiment[len(self.t_experiment) // 2:][i]
-            
+            scale_factor_400_experiment = self.t_reference / self.t_experiment[len(self.t_experiment) // 2:][i]
+            scale_factor_200_experiment = self.t_reference / self.t_experiment[:len(self.t_experiment) // 2][i]
             self.scaled_400_experiment.append(scale_factor_400_experiment * self.corrected_400_experiment[i])
             self.scaled_200_experiment.append(scale_factor_200_experiment * self.corrected_200_experiment[i])
 
-    def sellmeier(self):
+    # def sellmeier(self):
         
-        for wl in self.wavelengths_400nm / 1000:
+    #     for wl in self.wavelengths_400nm / 1000:
             
-            n = (1 + ((self.B1 * wl ** 2) / (wl ** 2 - self.C1)) + ((self.B2 * wl ** 2) / (wl ** 2 - self.C2))) ** 0.5
+    #         n = (1 + ((self.B1 * wl ** 2) / (wl ** 2 - self.C1)) + ((self.B2 * wl ** 2) / (wl ** 2 - self.C2))) ** 0.5
             
-            self.water_indices.append(n)
+    #         self.water_indices.append(n)
 
     # def effective_index(self):
 

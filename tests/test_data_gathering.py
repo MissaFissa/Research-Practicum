@@ -1,63 +1,42 @@
 import pandas as pd
-from pathlib import Path
 import numpy as np
+from pathlib import Path
 
 cwd = Path.cwd()
 
-class DataGathering:
+class DataGathering():
 
-    def __init__(self):
-        
+    def __init__(self, filename):
+
+        self.filename = filename
         self.df_water = pd.read_csv(f'{cwd}/literature_data/Hale.csv', sep=',')
         self.dict_water = dict(enumerate(self.df_water))
         self.wavelengths_water = self.df_water[self.dict_water[0]].astype(float)
         self.indices_water = self.df_water[self.dict_water[1]].astype(float)
-
-        self.df_experiment = pd.read_csv(f'{cwd}/data/data_experiment/experiment.csv', sep=';', skiprows=[0,1,2,3,4], header=[0], decimal=',')
-        self.info_experiment = pd.read_csv(f'{cwd}/data/data_experiment/experiment.csv', sep=';', index_col=0, nrows=2, skiprows=[1,4], decimal=',')
-        self.dict_experiment = dict(enumerate(self.df_experiment))
-
-        self.df_400 = pd.read_csv(f'{cwd}/data/data_400mu_csv/12_measurements_400mu.csv', sep=';', skiprows=[0,1,2,3,4], header=[0], decimal=',')
-        self.info_400 = pd.read_csv(f'{cwd}/data/data_400mu_csv/12_measurements_400mu.csv', sep=';', index_col=0, nrows=2, skiprows=[1,4], decimal=',')
-        self.dict_400 = dict(enumerate(self.df_400))
-
-        self.df_200 = pd.read_csv(f'{cwd}/data/data_200mu_csv/12_measurements_200mu.csv', sep=';', skiprows=[0,1,2,3,4], header=[0], decimal=',')
-        self.info_200 = pd.read_csv(f'{cwd}/data/data_200mu_csv/12_measurements_200mu.csv', sep=';', index_col=0, nrows=2, skiprows=[1,4], decimal=',')
-        self.dict_200 = dict(enumerate(self.df_200))
-
-        self.t_400 = list(dict.fromkeys(self.info_400.iloc[0]))
-        self.t_200 = list(dict.fromkeys(self.info_200.iloc[0]))
-        self.t_experiment = list(dict.fromkeys(self.info_experiment.iloc[0]))
-
-        self.index_wl400nm = 451
-   
+        self.df = pd.read_csv(f'{cwd}/data/data_experiment/{filename}.csv', sep=';', skiprows=[0,1,2,3,4], header=[0], decimal=',')
+        self.info = pd.read_csv(f'{cwd}/data/data_experiment/{filename}.csv', sep=';', index_col=0, nrows=2, skiprows=[1,4], decimal=',')
+        self.dict = dict(enumerate(self.df))
+        self.t = self.info.iloc[0].to_list()
+        self.t_200 = None
+        self.t_400 = None
+        self.dict_200 = None
+        self.dict_400 = None
+        self.df_200 = None
+        self.df_400 = None
         self.n_eff_400_15deg = []
-        self.n_eff_400_0deg = []
         self.n_eff_200_15deg = []
-        self.n_eff_200_0deg = []
-        self.n_eff_200_15deg_experiment = []
-        self.n_eff_200_15deg_experiment = []
-
         self.scaled_400 = []
         self.scaled_200 = []
-        self.scaled_400_experiment = []
-        self.scaled_200_experiment = []
         self.dark_400 = []
         self.dark_200 = []
-        self.dark_400_experiment = []
-        self.dark_200_experiment = []
         self.good_400 = []
         self.good_200 = []
-        self.good_400_experiment = []
-        self.good_200_experiment = []
         self.corrected_400 = []
         self.corrected_200 = []
-        self.corrected_400_experiment = []
-        self.corrected_200_experiment = []
         self.water_indices = []
-
-        self.wavelengths = self.df_400[self.dict_400[0]]
-        self.wavelengths_400nm = self.df_400[self.dict_400[0]][self.index_wl400nm:]
+        self.index_wl400nm = 451
+        self.wavelengths = self.df[self.dict[0]]
+        self.wavelengths_400nm = self.df[self.dict[0]][self.index_wl400nm:]
         self.t_reference = 6
         self.NA = 0.39
         self.n_water = 1.33
@@ -67,9 +46,37 @@ class DataGathering:
         self.B2 = 0.08495
         self.C2 = 8.91377
 
-    def background_correction(self):
+    def split_dataframe(self):
+        
+        dict_200_temp = {}
+        dict_400_temp = {}
+        t_200_temp = []
+        t_400_temp = []
 
-        for i in range(1,len(self.dict_400)):
+        for k, v in self.dict.items():
+
+            if '200' in v:
+
+                dict_200_temp.update({v:self.df[v]})
+                t_200_temp.append(self.t[k-1])
+
+            if '400' in v:
+
+                dict_400_temp.update({v:self.df[v]})
+                t_400_temp.append(self.t[k-1])
+
+        self.df_200 = pd.DataFrame.from_dict(dict_200_temp)
+        self.df_400 = pd.DataFrame.from_dict(dict_400_temp)
+        self.dict_200 = dict(enumerate(self.df_200))
+        self.dict_400 = dict(enumerate(self.df_400))
+        self.t_200 = list(dict.fromkeys(t_200_temp))
+        self.t_400 = list(dict.fromkeys(t_400_temp))
+
+    def background_correction(self):
+        
+        self.split_dataframe()
+
+        for i in range(len(self.dict_400)):
 
             if 'dark' in self.dict_200[i]:
 
@@ -100,18 +107,19 @@ class DataGathering:
             self.corrected_400.append(corrected_400_temp)
             self.corrected_200.append(corrected_200_temp)
 
-        self.corrected_400_array = np.array(self.corrected_400)
-        self.corrected_200_array = np.array(self.corrected_200)
+        self.corrected_400 = np.array(self.corrected_400)
+        self.corrected_200 = np.array(self.corrected_200)
 
     def scale(self):
+
+        self.background_correction()
 
         for i in range(len(self.corrected_400)):
 
             scale_factor_400 = self.t_reference / self.t_400[i]
             scale_factor_200 = self.t_reference / self.t_200[i]
-            
-            self.scaled_400.append(scale_factor_400 * self.corrected_400_array[i])
-            self.scaled_200.append(scale_factor_200 * self.corrected_200_array[i])
+            self.scaled_400.append(scale_factor_400 * self.corrected_400[i])
+            self.scaled_200.append(scale_factor_200 * self.corrected_200[i])
 
     def sellmeier(self):
         
@@ -122,26 +130,30 @@ class DataGathering:
             self.water_indices.append(n)
 
     def effective_index(self):
+        
+        self.scale()
 
-        b = self.n_air
-
-        for i in range(len(self.scaled_400[0])):
+        if 'bellyfat' not in self.filename:
             
-            c = self.water_indices[i]
+            self.sellmeier()
 
-            a_400_15_deg = (self.scaled_400[0][i] / self.scaled_400[5][i]) ** 0.5
-            a_400_0_deg = (self.scaled_400[1][i] / self.scaled_400[4][i]) ** 0.5
-            n_eff_400_15deg = ((-1 * (c - b + a_400_15_deg * (c - b)) - ((c - b + a_400_15_deg * (c - b)) ** 2 + (4 * b * c * ((1 - a_400_15_deg) ** 2))) ** 0.5) / (2 * (1 - a_400_15_deg)))
-            n_eff_400_0deg = ((-1 * (c - b + a_400_0_deg * (c - b)) - ((c - b + a_400_0_deg * (c - b)) ** 2 + (4 * b * c * ((1 - a_400_0_deg) ** 2))) ** 0.5) / (2 * (1 - a_400_0_deg)))
+            b = self.n_air
 
-            self.n_eff_400_15deg.append(n_eff_400_15deg)
-            self.n_eff_400_0deg.append(n_eff_400_0deg)
+            for i in range(len(self.scaled_400[0])):
+                
+                c = self.water_indices[i]
 
-            a_200_15_deg = (self.scaled_200[0][i] / self.scaled_200[5][i]) ** 0.5
-            a_200_0_deg = (self.scaled_200[1][i] / self.scaled_200[4][i]) ** 0.5
+                a_400_15_deg = (self.scaled_400[0][i] / self.scaled_400[2][i]) ** 0.5
+                n_eff_400_15deg = ((-1 * (c - b + a_400_15_deg * (c - b)) - ((c - b + a_400_15_deg * (c - b)) ** 2 + (4 * b * c * ((1 - a_400_15_deg) ** 2))) ** 0.5) / (2 * (1 - a_400_15_deg)))
 
-            n_eff_200_15deg = ((-1 * (c - b + a_200_15_deg * (c - b)) - ((c - b + a_200_15_deg * (c - b)) ** 2 + (4 * b * c * ((1 - a_200_15_deg) ** 2))) ** 0.5) / (2 * (1 - a_200_15_deg)))
-            n_eff_200_0deg = ((-1 * (c - b + a_200_0_deg * (c - b)) - ((c - b + a_200_0_deg * (c - b)) ** 2 + (4 * b * c * ((1 - a_200_0_deg) ** 2))) ** 0.5) / (2 * (1 - a_200_0_deg)))
+                self.n_eff_400_15deg.append(n_eff_400_15deg)
 
-            self.n_eff_200_15deg.append(n_eff_200_15deg)
-            self.n_eff_200_0deg.append(n_eff_200_0deg)
+                a_200_15_deg = (self.scaled_200[0][i] / self.scaled_200[2][i]) ** 0.5
+
+                n_eff_200_15deg = ((-1 * (c - b + a_200_15_deg * (c - b)) - ((c - b + a_200_15_deg * (c - b)) ** 2 + (4 * b * c * ((1 - a_200_15_deg) ** 2))) ** 0.5) / (2 * (1 - a_200_15_deg)))
+
+                self.n_eff_200_15deg.append(n_eff_200_15deg)
+
+        else:
+
+            return
