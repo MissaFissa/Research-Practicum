@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt 
 import numpy as np
-from data_gathering import DataTests, DataExperiment
+from test_data_gathering import DataTests, DataExperiment
 
 data = DataTests()
 data.background_correction()
@@ -11,7 +11,6 @@ data.effective_index()
 experiment = DataExperiment()
 experiment.background_correction()
 experiment.scale()
-experiment.sellmeier()
 
 plt.rcParams.update({'font.size': 8})
 
@@ -180,7 +179,7 @@ plt.margins(0)
 
 plt.close(fig1)
 plt.close(fig2)
-plt.close(fig3)
+# plt.close(fig3)
 plt.close(fig4)
 plt.close(fig5)
 

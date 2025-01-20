@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt 
 import numpy as np
-import click
 from research_practicum.data_gathering import DataGathering
 
 plt.rcParams.update({'font.size': 8})
@@ -11,7 +10,7 @@ def plot_bellyfat():
     data = DataGathering(filename)
     data.effective_index()
 
-    fig1, axs1 = plt.subplots(2, 1, figsize=(10, 8), facecolor='whitesmoke')
+    fig1, axs1 = plt.subplots(2, 1, figsize=(14, 8), facecolor='whitesmoke')
 
     major_ticks_x = np.arange(150, 1150, 50)
     minor_ticks_x = np.arange(150, 1150, 10)
@@ -91,7 +90,7 @@ def plot_calibration():
     data = DataGathering(filename)
     data.effective_index()
 
-    fig1, axs1 = plt.subplots(2, 1, figsize=(10, 8), facecolor='whitesmoke')
+    fig1, axs1 = plt.subplots(2, 1, figsize=(14, 8), facecolor='whitesmoke')
 
     major_ticks_x = np.arange(150, 1150, 50)
     minor_ticks_x = np.arange(150, 1150, 10)
@@ -127,7 +126,7 @@ def plot_calibration():
     plt.tight_layout()
     plt.margins(0)
 
-    fig2, axs2 = plt.subplots(2, 1, figsize=(10, 8), facecolor='whitesmoke')
+    fig2, axs2 = plt.subplots(2, 1, figsize=(14, 8), facecolor='whitesmoke')
 
     major_ticks_x_2 = np.arange(400, 1150, 50)
     minor_ticks_x_2 = np.arange(400, 1150, 10)
@@ -168,8 +167,17 @@ def plot_calibration():
 
     major_ticks_x_3 = np.arange(400, 950, 50)
     minor_ticks_x_3 = np.arange(400, 950, 10)
-    # major_ticks_y_3 = np.arange(0, 75000, 5000)
-    # minor_ticks_y_3 = np.arange(0, 75000, 1000)
+    major_ticks_y_3_400 = np.arange(int(min(data.n_eff_400_15deg)), int(max(data.n_eff_400_15deg)) + 0.5, 0.5)
+    minor_ticks_y_3_400 = np.arange(int(min(data.n_eff_400_15deg)), int(max(data.n_eff_400_15deg)) + 0.5, 0.1)
+    major_ticks_y_3_200 = np.arange(int(min(data.n_eff_200_15deg)), int(max(data.n_eff_200_15deg)) + 0.5, 0.5)
+    minor_ticks_y_3_200 = np.arange(int(min(data.n_eff_200_15deg)), int(max(data.n_eff_200_15deg)) + 0.5, 0.1)
+
+    axs3[0].set_yticks(major_ticks_y_3_400)
+    axs3[0].set_yticks(minor_ticks_y_3_400, minor=True)
+    axs3[1].set_yticks(major_ticks_y_3_200)
+    axs3[1].set_yticks(minor_ticks_y_3_200, minor=True)
+    axs3[0].set_ylim(int(min(data.n_eff_400_15deg)), int(max(data.n_eff_400_15deg)))
+    axs3[1].set_ylim(int(min(data.n_eff_200_15deg)), int(max(data.n_eff_200_15deg)))
 
     for ax in axs3:
 
@@ -178,13 +186,10 @@ def plot_calibration():
 
         ax.set_xticks(major_ticks_x_3)
         ax.set_xticks(minor_ticks_x_3, minor=True)
-        # ax.set_yticks(major_ticks_y_3)
-        # ax.set_yticks(minor_ticks_y_3, minor=True)
 
         ax.grid(which='major', alpha=0.5, lw=.8, ls='--')
         ax.grid(which='minor', alpha=0.3, lw=.6, ls='--')
         ax.set_xlim(400, 900)
-        # ax.set_ylim(0, 70000)
         ax.set_facecolor('dimgrey')
 
         axs3[0].title.set_text('$15\\degree$ $400\\mu$')
@@ -194,14 +199,14 @@ def plot_calibration():
     plt.tight_layout()
     plt.margins(0)
 
-    fig4, axs4 = plt.subplots(1, figsize=(12, 8), facecolor='whitesmoke')
+    fig4, axs4 = plt.subplots(1, figsize=(14, 8), facecolor='whitesmoke')
 
-    axs4.plot(data.wavelengths_400nm, data.water_indices, c='dodgerblue')
+    axs4.plot(data.wavelengths_400nm, data.water_indices, c='dodgerblue', ls='dotted')
 
     major_ticks_x_4 = np.arange(400, 950, 50)
     minor_ticks_x_4 = np.arange(400, 950, 10)
-    major_ticks_y_4 = np.arange(1.3, 1.4, 0.005)
-    minor_ticks_y_4 = np.arange(1.3, 1.4, 0.001)
+    major_ticks_y_4 = np.arange(round(min(data.water_indices),2), round(max(data.water_indices),2) + 0.005, 0.005)
+    minor_ticks_y_4 = np.arange(round(min(data.water_indices),2), round(max(data.water_indices),2) + 0.005, 0.001)
 
     axs4.set_xticks(major_ticks_x_4)
     axs4.set_xticks(minor_ticks_x_4, minor=True)
@@ -210,6 +215,7 @@ def plot_calibration():
     axs4.grid(which='major', alpha=0.5, lw=.8, ls='--')
     axs4.grid(which='minor', alpha=0.3, lw=.6, ls='--')
     axs4.set_xlim(400, 900)
+    axs4.set_ylim(min(data.water_indices), max(data.water_indices))
     axs4.set_xlabel('Wavelength [nm]')
     axs4.set_ylabel('Refractive index')
     axs4.set_facecolor('dimgrey')

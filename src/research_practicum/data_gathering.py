@@ -13,6 +13,7 @@ class DataGathering():
         self.dict_water = dict(enumerate(self.df_water))
         self.wavelengths_water = self.df_water[self.dict_water[0]].astype(float)
         self.indices_water = self.df_water[self.dict_water[1]].astype(float)
+        
         self.df = pd.read_csv(f'{cwd}/data/data_experiment/{filename}.csv', sep=';', skiprows=[0,1,2,3,4], header=[0], decimal=',')
         self.info = pd.read_csv(f'{cwd}/data/data_experiment/{filename}.csv', sep=';', index_col=0, nrows=2, skiprows=[1,4], decimal=',')
         self.dict = dict(enumerate(self.df))
@@ -156,4 +157,4 @@ class DataGathering():
 
         else:
 
-            return
+            return            
