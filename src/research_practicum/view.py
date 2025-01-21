@@ -1,8 +1,87 @@
 import matplotlib.pyplot as plt 
 import click
 from research_practicum.data_gathering import DataGathering, np
+from research_practicum.analysis import Analysis
 
 plt.rcParams.update({'font.size': 8})
+
+@click.command()
+@click.argument('figs', required=False)
+def plot_experiment(figs):
+
+    analysis = Analysis()
+
+    fig1, axs1 = plt.subplots(2, 2, figsize=(14, 8), facecolor='whitesmoke')
+    fig1.set_label('fig1')
+
+    axs1[0,0].plot(analysis.wavelengths_400nm, analysis.R_fat_400, c='dodgerblue', ls='dotted')
+    axs1[0,1].plot(analysis.wavelengths_400nm, analysis.R_muscle_400, c='dodgerblue', ls='dotted')
+    axs1[1,0].plot(analysis.wavelengths_400nm, analysis.R_redmuscle_400, c='dodgerblue', ls='dotted')
+    axs1[1,1].plot(analysis.wavelengths_400nm, analysis.R_skin_400, c='dodgerblue', ls='dotted')
+
+    major_ticks_x_1 = np.arange(400, 950, 50)
+    minor_ticks_x_1 = np.arange(400, 950, 10)
+ 
+    for ax in axs1.flatten():
+
+        ax.set_xlabel('Wavelength [nm]')
+        ax.set_ylabel('Reflectance')
+
+        ax.set_xticks(major_ticks_x_1)
+        ax.set_xticks(minor_ticks_x_1, minor=True)
+
+        ax.grid(which='major', alpha=0.8, lw=.8, ls='--')
+        ax.grid(which='minor', alpha=0.6, lw=.6, ls='--')
+        ax.set_xlim(400, 900)
+        ax.set_facecolor('whitesmoke')
+
+        axs1[0,0].title.set_text('Fat $15\\degree$ $400\\mu$')
+        axs1[0,1].title.set_text('Muscle $15\\degree$ $400\\mu$')
+        axs1[1,0].title.set_text('Red muscle $15\\degree$ $400\\mu$')
+        axs1[1,1].title.set_text('Skin $15\\degree$ $400\\mu$')
+
+    fig1.suptitle(' Reflectance of different bellyfat parts ', fontsize=14)
+    plt.tight_layout()
+    plt.margins(0)
+
+    fig2, axs2 = plt.subplots(2, 2, figsize=(14, 8), facecolor='whitesmoke')
+    fig2.set_label('fig2')
+
+    axs2[0,0].plot(analysis.wavelengths_400nm, analysis.R_fat_200, c='dodgerblue', ls='dotted')
+    axs2[0,1].plot(analysis.wavelengths_400nm, analysis.R_muscle_200, c='dodgerblue', ls='dotted')
+    axs2[1,0].plot(analysis.wavelengths_400nm, analysis.R_redmuscle_200, c='dodgerblue', ls='dotted')
+    axs2[1,1].plot(analysis.wavelengths_400nm, analysis.R_skin_200, c='dodgerblue', ls='dotted')
+
+    major_ticks_x_2 = np.arange(400, 950, 50)
+    minor_ticks_x_2 = np.arange(400, 950, 10)
+ 
+    for ax in axs2.flatten():
+
+        ax.set_xlabel('Wavelength [nm]')
+        ax.set_ylabel('Reflectance')
+
+        ax.set_xticks(major_ticks_x_2)
+        ax.set_xticks(minor_ticks_x_2, minor=True)
+
+        ax.grid(which='major', alpha=0.8, lw=.8, ls='--')
+        ax.grid(which='minor', alpha=0.6, lw=.6, ls='--')
+        ax.set_xlim(400, 900)
+        ax.set_facecolor('whitesmoke')
+
+        axs2[0,0].title.set_text('Fat $15\\degree$ $200\\mu$')
+        axs2[0,1].title.set_text('Muscle $15\\degree$ $200\\mu$')
+        axs2[1,0].title.set_text('Red muscle $15\\degree$ $200\\mu$')
+        axs2[1,1].title.set_text('Skin $15\\degree$ $200\\mu$')
+
+    fig2.suptitle(' Reflectance of different bellyfat parts ', fontsize=14)
+    plt.tight_layout()
+    plt.margins(0)
+
+    for i in figs or []:
+
+        plt.close('fig'+i)
+    
+    plt.show()
 
 @click.command()
 @click.argument('figs', required=False)
