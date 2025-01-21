@@ -20,3 +20,4 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry.scripts]
 bellyfat = "research_practicum.view:plot_bellyfat"
 calibration = "research_practicum.view:plot_calibration"
+tests = "research_practicum.view:plot_tests"

@@ -1,12 +1,73 @@
 import matplotlib.pyplot as plt 
-import numpy as np
-from research_practicum.data_gathering import DataGathering
+from research_practicum.data_gathering import DataGathering, Path, pd, np
 
 plt.rcParams.update({'font.size': 8})
 
+def plot_tests():
+
+    filename_400 = 'data_400mu_csv/12_measurements_400mu'
+    filename_200 = 'data_200mu_csv/12_measurements_200mu'
+
+    df_400 = pd.read_csv(f'{Path.cwd()}/data/{filename_400}.csv', sep=';',decimal=',', header=[5])
+    df_200 = pd.read_csv(f'{Path.cwd()}/data/{filename_200}.csv', sep=';', decimal=',', header=[5])
+
+    df_400_info = pd.read_csv(f'{Path.cwd()}/data/{filename_400}.csv', sep=';', index_col=0, nrows=2, skiprows=[1,4], decimal=',')
+    df_200_info = pd.read_csv(f'{Path.cwd()}/data/{filename_200}.csv', sep=';', index_col=0, nrows=2, skiprows=[1,4], decimal=',')
+    
+    df_joined = pd.merge(df_400, df_200, on='Wavelength [nm]')
+
+    df_joined.to_csv(f'{Path.cwd()}/data/test_measurements.csv', index=False)
+
+    df_joined_info = pd.concat([df_400_info, df_200_info], axis=1)
+    df_joined_info.to_csv(f'{Path.cwd()}/data/info_test_measurements.csv')
+    filename = 'test_measurements'
+
+    data = DataGathering(filename)
+    data.effective_index()
+
+    fig1, axs1 = plt.subplots(2, 1, figsize=(10, 8), facecolor='whitesmoke')
+
+    major_ticks_x = np.arange(150, 1150, 50)
+    minor_ticks_x = np.arange(150, 1150, 10)
+    major_ticks_y = np.arange(0, 75000, 5000)
+    minor_ticks_y = np.arange(0, 75000, 1000)
+
+    axs1[0].set_prop_cycle('color', plt.cm.jet(np.linspace(0, 1, 12)))
+    axs1[1].set_prop_cycle('color', plt.cm.jet(np.linspace(0, 1, 12)))
+
+    for i in range(len(data.dict_400)):
+
+        axs1[0].plot(data.wavelengths, data.df_400[data.dict_400[i]], label=f'{data.dict_400[i]}')
+        axs1[1].plot(data.wavelengths, data.df_200[data.dict_200[i]], label=f'{data.dict_200[i]}')
+
+    for ax in axs1:
+
+        ax.set_xlabel('Wavelength [nm]')
+        ax.set_ylabel('Scope [ADC Counts]')
+        ax.set_xticks(major_ticks_x)
+        ax.set_xticks(minor_ticks_x, minor=True)
+        ax.set_yticks(major_ticks_y)
+        ax.set_yticks(minor_ticks_y, minor=True)
+        ax.grid(which='major', alpha=0.5, lw=.8, ls='--')
+        ax.grid(which='minor', alpha=0.3, lw=.6, ls='--')
+        ax.set_xlim(150, 1100)
+        ax.set_ylim(0, 70000)
+        ax.legend(prop={'size': 8})
+        ax.set_facecolor('dimgrey')
+
+    axs1[0].set_title('400$\\mu$ fiber')
+    axs1[1].set_title('200$\\mu$ fiber')
+
+    plt.tight_layout()
+    plt.margins(0)
+
+    plt.close(fig1)
+
+    plt.show()
+
 def plot_bellyfat():
 
-    filename = 'bellyfat'
+    filename = 'data_experiment/bellyfat'
     data = DataGathering(filename)
     data.effective_index()
 
@@ -85,7 +146,7 @@ def plot_bellyfat():
 
 def plot_calibration():
 
-    filename = 'calibration'
+    filename = 'data_experiment/calibration'
 
     data = DataGathering(filename)
     data.effective_index()

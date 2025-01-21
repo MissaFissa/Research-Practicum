@@ -177,9 +177,9 @@ fig5.suptitle(' Experiment Measurements ', fontsize=20)
 plt.tight_layout()
 plt.margins(0)
 
-plt.close(fig1)
+# plt.close(fig1)
 plt.close(fig2)
-# plt.close(fig3)
+plt.close(fig3)
 plt.close(fig4)
 plt.close(fig5)
 

@@ -13,9 +13,12 @@ class DataGathering():
         self.dict_water = dict(enumerate(self.df_water))
         self.wavelengths_water = self.df_water[self.dict_water[0]].astype(float)
         self.indices_water = self.df_water[self.dict_water[1]].astype(float)
-        
-        self.df = pd.read_csv(f'{cwd}/data/data_experiment/{filename}.csv', sep=';', skiprows=[0,1,2,3,4], header=[0], decimal=',')
-        self.info = pd.read_csv(f'{cwd}/data/data_experiment/{filename}.csv', sep=';', index_col=0, nrows=2, skiprows=[1,4], decimal=',')
+
+        self.df = self.csv_file()[0]
+        self.info = self.csv_file()[1]
+
+        # self.df = pd.read_csv(f'{cwd}/data/{filename}.csv', sep=';', skiprows=[0,1,2,3,4], header=[0], decimal=',')
+        # self.info = pd.read_csv(f'{cwd}/data/{filename}.csv', sep=';', index_col=0, nrows=2, skiprows=[1,4], decimal=',')
         self.dict = dict(enumerate(self.df))
         self.t = self.info.iloc[0].to_list()
         self.t_200 = None
@@ -47,6 +50,20 @@ class DataGathering():
         self.B2 = 0.08495
         self.C2 = 8.91377
 
+    def csv_file(self):
+
+        if 'test' in self.filename:
+
+            self.df = pd.read_csv(f'{cwd}/data/{self.filename}.csv', sep=',', header=[0])
+            self.info = pd.read_csv(f'{cwd}/data/info_{self.filename}.csv', sep=',', index_col=0, nrows=2, skiprows=[2])
+
+        else:
+
+            self.df = pd.read_csv(f'{cwd}/data/{self.filename}.csv', sep=';', skiprows=[0,1,2,3,4], header=[0], decimal=',')
+            self.info = pd.read_csv(f'{cwd}/data/info_{self.filename}.csv', sep=';', index_col=0, nrows=2, skiprows=[0,2], decimal=',')
+
+        return self.df, self.info
+    
     def split_dataframe(self):
         
         dict_200_temp = {}
@@ -123,7 +140,7 @@ class DataGathering():
             self.scaled_200.append(scale_factor_200 * self.corrected_200[i])
 
     def sellmeier(self):
-        
+
         for wl in self.wavelengths_400nm / 1000:
             
             n = (1 + ((self.B1 * wl ** 2) / (wl ** 2 - self.C1)) + ((self.B2 * wl ** 2) / (wl ** 2 - self.C2))) ** 0.5

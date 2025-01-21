@@ -4,8 +4,8 @@ class Analysis:
 
     def __init__(self):
         
-        filenames = ['calibration', 'beellyfat']
-        self.testdata = 
+        filenames = ['calibration', 'bellyfat']
+        # self.testdata = 
         self.data = DataGathering(filenames[0]) 
         self.abs_ref = []
 
