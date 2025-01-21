@@ -13,12 +13,7 @@ class DataGathering():
         self.dict_water = dict(enumerate(self.df_water))
         self.wavelengths_water = self.df_water[self.dict_water[0]].astype(float)
         self.indices_water = self.df_water[self.dict_water[1]].astype(float)
-
-        self.df = self.csv_file()[0]
-        self.info = self.csv_file()[1]
-
-        # self.df = pd.read_csv(f'{cwd}/data/{filename}.csv', sep=';', skiprows=[0,1,2,3,4], header=[0], decimal=',')
-        # self.info = pd.read_csv(f'{cwd}/data/{filename}.csv', sep=';', index_col=0, nrows=2, skiprows=[1,4], decimal=',')
+        self.csv_file()
         self.dict = dict(enumerate(self.df))
         self.t = self.info.iloc[0].to_list()
         self.t_200 = None
@@ -29,6 +24,8 @@ class DataGathering():
         self.df_400 = None
         self.n_eff_400_15deg = []
         self.n_eff_200_15deg = []
+        self.n_eff_400_0deg = []
+        self.n_eff_200_0deg = []
         self.scaled_400 = []
         self.scaled_200 = []
         self.dark_400 = []
@@ -60,9 +57,7 @@ class DataGathering():
         else:
 
             self.df = pd.read_csv(f'{cwd}/data/{self.filename}.csv', sep=';', skiprows=[0,1,2,3,4], header=[0], decimal=',')
-            self.info = pd.read_csv(f'{cwd}/data/info_{self.filename}.csv', sep=';', index_col=0, nrows=2, skiprows=[0,2], decimal=',')
-
-        return self.df, self.info
+            self.info = pd.read_csv(f'{cwd}/data/{self.filename}.csv', sep=';', index_col=0, nrows=2, skiprows=[1,4], decimal=',')
     
     def split_dataframe(self):
         
@@ -131,7 +126,7 @@ class DataGathering():
     def scale(self):
 
         self.background_correction()
-
+     
         for i in range(len(self.corrected_400)):
 
             scale_factor_400 = self.t_reference / self.t_400[i]
@@ -156,21 +151,47 @@ class DataGathering():
             self.sellmeier()
 
             b = self.n_air
+    
+            if 'test' in self.filename:
+      
+                for i in range(len(self.scaled_400[0])):
+                    
+                    c = self.water_indices[i]
+            
+                    a_400_15_deg = (self.scaled_400[self.good_400.index('400 mu 280 ms 15 deg fresnel')][i] / self.scaled_400[self.good_400.index('400 mu 2 s 15 deg water')][i]) ** 0.5
+                    a_400_0_deg = (self.scaled_400[self.good_400.index('400 mu 6 ms 0 deg fresnel')][i] / self.scaled_400[self.good_400.index('400 mu 107 ms 0 deg water')][i]) ** 0.5
 
-            for i in range(len(self.scaled_400[0])):
-                
-                c = self.water_indices[i]
+                    n_eff_400_15deg = ((-1 * (c - b + a_400_15_deg * (c - b)) - ((c - b + a_400_15_deg * (c - b)) ** 2 + (4 * b * c * ((1 - a_400_15_deg) ** 2))) ** 0.5) / (2 * (1 - a_400_15_deg)))
+                    n_eff_400_0deg = ((-1 * (c - b + a_400_0_deg * (c - b)) - ((c - b + a_400_0_deg * (c - b)) ** 2 + (4 * b * c * ((1 - a_400_0_deg) ** 2))) ** 0.5) / (2 * (1 - a_400_0_deg)))
 
-                a_400_15_deg = (self.scaled_400[0][i] / self.scaled_400[2][i]) ** 0.5
-                n_eff_400_15deg = ((-1 * (c - b + a_400_15_deg * (c - b)) - ((c - b + a_400_15_deg * (c - b)) ** 2 + (4 * b * c * ((1 - a_400_15_deg) ** 2))) ** 0.5) / (2 * (1 - a_400_15_deg)))
+                    self.n_eff_400_15deg.append(n_eff_400_15deg)
+                    self.n_eff_400_0deg.append(n_eff_400_0deg)
 
-                self.n_eff_400_15deg.append(n_eff_400_15deg)
+                    a_200_15_deg = (self.scaled_200[self.good_200.index('fresnel 200 mu 1.4 s 15 deg')][i] / self.scaled_200[self.good_200.index('200 mu 1.6 s 15 deg water ')][i]) ** 0.5
+                    a_200_0_deg = (self.scaled_200[self.good_200.index('fresnel 200 mu 5 ms 0 deg ')][i] / self.scaled_200[self.good_200.index('200 mu 73 ms 0 deg water ')][i]) ** 0.5
 
-                a_200_15_deg = (self.scaled_200[0][i] / self.scaled_200[2][i]) ** 0.5
+                    n_eff_200_15deg = ((-1 * (c - b + a_200_15_deg * (c - b)) - ((c - b + a_200_15_deg * (c - b)) ** 2 + (4 * b * c * ((1 - a_200_15_deg) ** 2))) ** 0.5) / (2 * (1 - a_200_15_deg)))
+                    n_eff_200_0deg = ((-1 * (c - b + a_200_0_deg * (c - b)) - ((c - b + a_200_0_deg * (c - b)) ** 2 + (4 * b * c * ((1 - a_200_0_deg) ** 2))) ** 0.5) / (2 * (1 - a_200_0_deg)))
 
-                n_eff_200_15deg = ((-1 * (c - b + a_200_15_deg * (c - b)) - ((c - b + a_200_15_deg * (c - b)) ** 2 + (4 * b * c * ((1 - a_200_15_deg) ** 2))) ** 0.5) / (2 * (1 - a_200_15_deg)))
+                    self.n_eff_200_15deg.append(n_eff_200_15deg)
+                    self.n_eff_200_0deg.append(n_eff_200_0deg)
 
-                self.n_eff_200_15deg.append(n_eff_200_15deg)
+            else:
+               
+               for i in range(len(self.scaled_400[0])):
+                    
+                    c = self.water_indices[i]
+
+                    a_400_15_deg = (self.scaled_400[0][i] / self.scaled_400[2][i]) ** 0.5
+                    n_eff_400_15deg = ((-1 * (c - b + a_400_15_deg * (c - b)) - ((c - b + a_400_15_deg * (c - b)) ** 2 + (4 * b * c * ((1 - a_400_15_deg) ** 2))) ** 0.5) / (2 * (1 - a_400_15_deg)))
+
+                    self.n_eff_400_15deg.append(n_eff_400_15deg)
+
+                    a_200_15_deg = (self.scaled_200[0][i] / self.scaled_200[2][i]) ** 0.5
+
+                    n_eff_200_15deg = ((-1 * (c - b + a_200_15_deg * (c - b)) - ((c - b + a_200_15_deg * (c - b)) ** 2 + (4 * b * c * ((1 - a_200_15_deg) ** 2))) ** 0.5) / (2 * (1 - a_200_15_deg)))
+
+                    self.n_eff_200_15deg.append(n_eff_200_15deg)
 
         else:
 

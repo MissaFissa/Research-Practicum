@@ -21,8 +21,8 @@ class DataTests:
         self.t_400 = list(dict.fromkeys(self.info_400.iloc[0]))
         self.t_200 = list(dict.fromkeys(self.info_200.iloc[0]))
         self.n_eff_400_15deg = []
-        self.n_eff_400_0deg = []
         self.n_eff_200_15deg = []
+        self.n_eff_400_0deg = []
         self.n_eff_200_0deg = []
         self.scaled_400 = []
         self.scaled_200 = []

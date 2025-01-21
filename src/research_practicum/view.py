@@ -3,7 +3,10 @@ from research_practicum.data_gathering import DataGathering, Path, pd, np
 
 plt.rcParams.update({'font.size': 8})
 
+
 def plot_tests():
+
+    figs_tests = ['fig1', 'fig2']
 
     filename_400 = 'data_400mu_csv/12_measurements_400mu'
     filename_200 = 'data_200mu_csv/12_measurements_200mu'
@@ -26,6 +29,7 @@ def plot_tests():
     data.effective_index()
 
     fig1, axs1 = plt.subplots(2, 1, figsize=(10, 8), facecolor='whitesmoke')
+    fig1.set_label('fig1')
 
     major_ticks_x = np.arange(150, 1150, 50)
     minor_ticks_x = np.arange(150, 1150, 10)
@@ -61,17 +65,64 @@ def plot_tests():
     plt.tight_layout()
     plt.margins(0)
 
-    plt.close(fig1)
+    fig2, axs2 = plt.subplots(2, 2, figsize=(14, 8), facecolor='whitesmoke')
+    fig2.set_label('fig2')
+
+    axs2[0,0].plot(data.wavelengths_400nm, data.n_eff_400_15deg, c='dodgerblue', ls='dotted')
+    axs2[0,1].plot(data.wavelengths_400nm, data.n_eff_200_15deg, c='dodgerblue', ls='dotted')
+    axs2[1,0].plot(data.wavelengths_400nm, data.n_eff_400_0deg, c='dodgerblue', ls='dotted')
+    axs2[1,1].plot(data.wavelengths_400nm, data.n_eff_200_0deg, c='dodgerblue', ls='dotted')
+
+    major_ticks_x_2 = np.arange(400, 950, 50)
+    minor_ticks_x_2 = np.arange(400, 950, 10)
+    major_ticks_y_2_400 = np.arange(int(min(data.n_eff_400_15deg)), int(max(data.n_eff_400_15deg)) + 0.5, 0.5)
+    minor_ticks_y_2_400 = np.arange(int(min(data.n_eff_400_15deg)), int(max(data.n_eff_400_15deg)) + 0.5, 0.1)
+    major_ticks_y_2_200 = np.arange(int(min(data.n_eff_200_15deg)), int(max(data.n_eff_200_15deg)) + 0.5, 0.5)
+    minor_ticks_y_2_200 = np.arange(int(min(data.n_eff_200_15deg)), int(max(data.n_eff_200_15deg)) + 0.5, 0.1)
+
+    # axs2[0,0].set_yticks(major_ticks_y_2_400)
+    # axs2[0,0].set_yticks(minor_ticks_y_2_400, minor=True)
+    # axs2[0,1].set_yticks(major_ticks_y_2_200)
+    # axs2[0,1].set_yticks(minor_ticks_y_2_200, minor=True)
+    # axs2[0,0].set_ylim(int(min(data.n_eff_400_15deg)), int(max(data.n_eff_400_15deg)))
+    # axs2[0,1].set_ylim(int(min(data.n_eff_200_15deg)), int(max(data.n_eff_200_15deg)))
+
+    for ax in axs2.flatten():
+
+        ax.set_xlabel('Wavelength [nm]')
+        ax.set_ylabel('Calculated effectice index')
+
+        ax.set_xticks(major_ticks_x_2)
+        ax.set_xticks(minor_ticks_x_2, minor=True)
+
+        ax.grid(which='major', alpha=0.5, lw=.8, ls='--')
+        ax.grid(which='minor', alpha=0.3, lw=.6, ls='--')
+        ax.set_xlim(400, 900)
+        ax.set_facecolor('dimgrey')
+
+        axs2[0,0].title.set_text('$15\\degree$ $400\\mu$')
+        axs2[0,1].title.set_text('$15\\degree$ $200\\mu$')
+
+    fig2.suptitle(f' {filename} ', fontsize=20)
+    plt.tight_layout()
+    plt.margins(0)
+
+    # for i in figs_tests:
+
+    #     plt.close(i)
 
     plt.show()
 
 def plot_bellyfat():
+
+    figs_bellyfat = ['fig1', 'fig2']
 
     filename = 'data_experiment/bellyfat'
     data = DataGathering(filename)
     data.effective_index()
 
     fig1, axs1 = plt.subplots(2, 1, figsize=(14, 8), facecolor='whitesmoke')
+    fig1.set_label('fig1')
 
     major_ticks_x = np.arange(150, 1150, 50)
     minor_ticks_x = np.arange(150, 1150, 10)
@@ -108,6 +159,7 @@ def plot_bellyfat():
     plt.margins(0)
 
     fig2, axs2 = plt.subplots(2, 1, figsize=(14, 8), facecolor='whitesmoke')
+    fig2.set_label('fig2')
 
     axs2[0].set_prop_cycle('color', plt.cm.jet(np.linspace(0, 1, 6)))
     axs2[1].set_prop_cycle('color', plt.cm.jet(np.linspace(0, 1, 6)))
@@ -139,12 +191,15 @@ def plot_bellyfat():
     plt.margins(0)
     fig2.suptitle(f' {filename} ', fontsize=20)
 
-    plt.close(fig1)
-    plt.close(fig2)
+    for i in figs_bellyfat:
+
+        plt.close(i)
 
     plt.show()
 
 def plot_calibration():
+
+    figs_calibration = ['fig1', 'fig2', 'fig3', 'fig4']
 
     filename = 'data_experiment/calibration'
 
@@ -152,6 +207,7 @@ def plot_calibration():
     data.effective_index()
 
     fig1, axs1 = plt.subplots(2, 1, figsize=(14, 8), facecolor='whitesmoke')
+    fig1.set_label('fig1')
 
     major_ticks_x = np.arange(150, 1150, 50)
     minor_ticks_x = np.arange(150, 1150, 10)
@@ -188,6 +244,7 @@ def plot_calibration():
     plt.margins(0)
 
     fig2, axs2 = plt.subplots(2, 1, figsize=(14, 8), facecolor='whitesmoke')
+    fig2.set_label('fig2')
 
     major_ticks_x_2 = np.arange(400, 1150, 50)
     minor_ticks_x_2 = np.arange(400, 1150, 10)
@@ -222,6 +279,7 @@ def plot_calibration():
     plt.margins(0)
 
     fig3, axs3 = plt.subplots(2, 1, figsize=(14, 8), facecolor='whitesmoke')
+    fig3.set_label('fig3')
 
     axs3[0].plot(data.wavelengths_400nm, data.n_eff_400_15deg, c='dodgerblue', ls='dotted')
     axs3[1].plot(data.wavelengths_400nm, data.n_eff_200_15deg, c='dodgerblue', ls='dotted')
@@ -261,6 +319,7 @@ def plot_calibration():
     plt.margins(0)
 
     fig4, axs4 = plt.subplots(1, figsize=(14, 8), facecolor='whitesmoke')
+    fig4.set_label('fig4')
 
     axs4.plot(data.wavelengths_400nm, data.water_indices, c='dodgerblue', ls='dotted')
 
@@ -281,7 +340,12 @@ def plot_calibration():
     axs4.set_ylabel('Refractive index')
     axs4.set_facecolor('dimgrey')
     fig4.suptitle(f' Water indices ', fontsize=20)
+
     plt.tight_layout()
     plt.margins(0) 
+
+    for i in figs_calibration:
+
+        plt.close(i)
 
     plt.show()
