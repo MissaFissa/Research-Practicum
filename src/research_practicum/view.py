@@ -10,23 +10,9 @@ def plot_tests(figs):
 
     filename_400 = 'data_400mu_csv/12_measurements_400mu'
     filename_200 = 'data_200mu_csv/12_measurements_200mu'
-
-    df_400 = pd.read_csv(f'{Path.cwd()}/data/{filename_400}.csv', sep=';',decimal=',', header=[5])
-    df_200 = pd.read_csv(f'{Path.cwd()}/data/{filename_200}.csv', sep=';', decimal=',', header=[5])
-
-    df_400_info = pd.read_csv(f'{Path.cwd()}/data/{filename_400}.csv', sep=';', index_col=0, nrows=2, skiprows=[1,4], decimal=',')
-    df_200_info = pd.read_csv(f'{Path.cwd()}/data/{filename_200}.csv', sep=';', index_col=0, nrows=2, skiprows=[1,4], decimal=',')
-    
-    df_joined = pd.merge(df_400, df_200, on='Wavelength [nm]')
-
-    df_joined.to_csv(f'{Path.cwd()}/data/test_measurements.csv', index=False)
-
-    df_joined_info = pd.concat([df_400_info, df_200_info], axis=1)
-    df_joined_info.to_csv(f'{Path.cwd()}/data/info_test_measurements.csv')
-    filename = 'test_measurements'
-
+    filename = (f'{filename_400},{filename_200}')
     data = DataGathering(filename)
-    data.effective_index()
+    # data.gather_data()
 
     fig1, axs1 = plt.subplots(2, 1, figsize=(10, 8), facecolor='whitesmoke')
     fig1.set_label('fig1')
@@ -119,11 +105,8 @@ def plot_tests(figs):
 @click.argument('figs')
 def plot_bellyfat(figs):
 
-    figs_bellyfat = ['fig1', 'fig2']
-
     filename = 'data_experiment/bellyfat'
     data = DataGathering(filename)
-    data.effective_index()
 
     fig1, axs1 = plt.subplots(2, 1, figsize=(14, 8), facecolor='whitesmoke')
     fig1.set_label('fig1')
@@ -205,12 +188,9 @@ def plot_bellyfat(figs):
 @click.argument('figs')
 def plot_calibration(figs):
 
-    figs_calibration = ['fig1', 'fig2', 'fig3', 'fig4']
-
     filename = 'data_experiment/calibration'
 
     data = DataGathering(filename)
-    data.effective_index()
 
     fig1, axs1 = plt.subplots(2, 1, figsize=(14, 8), facecolor='whitesmoke')
     fig1.set_label('fig1')

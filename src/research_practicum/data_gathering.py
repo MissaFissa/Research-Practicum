@@ -13,9 +13,6 @@ class DataGathering():
         self.dict_water = dict(enumerate(self.df_water))
         self.wavelengths_water = self.df_water[self.dict_water[0]].astype(float)
         self.indices_water = self.df_water[self.dict_water[1]].astype(float)
-        self.csv_file()
-        self.dict = dict(enumerate(self.df))
-        self.t = self.info.iloc[0].to_list()
         self.t_200 = None
         self.t_400 = None
         self.dict_200 = None
@@ -36,8 +33,6 @@ class DataGathering():
         self.corrected_200 = []
         self.water_indices = []
         self.index_wl400nm = 451
-        self.wavelengths = self.df[self.dict[0]]
-        self.wavelengths_400nm = self.df[self.dict[0]][self.index_wl400nm:]
         self.t_reference = 5
         self.NA = 0.39
         self.n_water = 1.33
@@ -46,6 +41,33 @@ class DataGathering():
         self.C1 = 0.01007
         self.B2 = 0.08495
         self.C2 = 8.91377
+        self.gather_data()
+
+    def gather_data(self):
+
+        if ',' in self.filename:
+
+            filenames = self.filename.split(',')
+            filename_400 = filenames[0]
+            filename_200 = filenames[1]
+
+            df_400 = pd.read_csv(f'{Path.cwd()}/data/{filename_400}.csv', sep=';',decimal=',', header=[5])
+            df_200 = pd.read_csv(f'{Path.cwd()}/data/{filename_200}.csv', sep=';', decimal=',', header=[5])
+
+            df_400_info = pd.read_csv(f'{Path.cwd()}/data/{filename_400}.csv', sep=';', index_col=0, nrows=2, skiprows=[1,4], decimal=',')
+            df_200_info = pd.read_csv(f'{Path.cwd()}/data/{filename_200}.csv', sep=';', index_col=0, nrows=2, skiprows=[1,4], decimal=',')
+            
+            df_joined = pd.merge(df_400, df_200, on='Wavelength [nm]')
+            df_joined.to_csv(f'{Path.cwd()}/data/test_measurements.csv', index=False)
+            df_joined_info = pd.concat([df_400_info, df_200_info], axis=1)
+            df_joined_info.to_csv(f'{Path.cwd()}/data/info_test_measurements.csv')
+            self.filename = 'test_measurements'
+            
+        else:
+
+            pass
+        
+        self.csv_file()
 
     def csv_file(self):
 
@@ -53,12 +75,22 @@ class DataGathering():
 
             self.df = pd.read_csv(f'{cwd}/data/{self.filename}.csv', sep=',', header=[0])
             self.info = pd.read_csv(f'{cwd}/data/info_{self.filename}.csv', sep=',', index_col=0, nrows=2, skiprows=[2])
+            self.dict = dict(enumerate(self.df))
+            self.t = self.info.iloc[0].to_list()
+            self.wavelengths = self.df[self.dict[0]]
+            self.wavelengths_400nm = self.df[self.dict[0]][self.index_wl400nm:]
 
         else:
 
             self.df = pd.read_csv(f'{cwd}/data/{self.filename}.csv', sep=';', skiprows=[0,1,2,3,4], header=[0], decimal=',')
             self.info = pd.read_csv(f'{cwd}/data/{self.filename}.csv', sep=';', index_col=0, nrows=2, skiprows=[1,4], decimal=',')
-    
+            self.dict = dict(enumerate(self.df))
+            self.t = self.info.iloc[0].to_list()
+            self.wavelengths = self.df[self.dict[0]]
+            self.wavelengths_400nm = self.df[self.dict[0]][self.index_wl400nm:]
+
+        self.split_dataframe()
+
     def split_dataframe(self):
         
         dict_200_temp = {}
@@ -85,10 +117,10 @@ class DataGathering():
         self.t_200 = list(dict.fromkeys(t_200_temp))
         self.t_400 = list(dict.fromkeys(t_400_temp))
 
+        self.background_correction()
+
     def background_correction(self):
         
-        self.split_dataframe()
-
         for i in range(len(self.dict_400)):
 
             if 'dark' in self.dict_200[i]:
@@ -123,9 +155,9 @@ class DataGathering():
         self.corrected_400 = np.array(self.corrected_400)
         self.corrected_200 = np.array(self.corrected_200)
 
-    def scale(self):
+        self.scale()
 
-        self.background_correction()
+    def scale(self):
      
         for i in range(len(self.corrected_400)):
 
@@ -133,6 +165,8 @@ class DataGathering():
             scale_factor_200 = self.t_reference / self.t_200[i]
             self.scaled_400.append(scale_factor_400 * self.corrected_400[i])
             self.scaled_200.append(scale_factor_200 * self.corrected_200[i])
+
+        self.effective_index()
 
     def sellmeier(self):
 
@@ -144,8 +178,6 @@ class DataGathering():
 
     def effective_index(self):
         
-        self.scale()
-
         if 'bellyfat' not in self.filename:
             
             self.sellmeier()

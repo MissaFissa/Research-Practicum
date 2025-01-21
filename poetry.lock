@@ -595,20 +595,6 @@ files = [
 diagrams = ["jinja2", "railroad-diagrams"]
 
 [[package]]
-name = "pyqtgraph"
-version = "0.13.7"
-description = "Scientific Graphics and GUI Library for Python"
-optional = false
-python-versions = ">=3.9"
-files = [
-    {file = "pyqtgraph-0.13.7-py3-none-any.whl", hash = "sha256:7754edbefb6c367fa0dfb176e2d0610da3ada20aa7a5318516c74af5fb72bf7a"},
-    {file = "pyqtgraph-0.13.7.tar.gz", hash = "sha256:64f84f1935c6996d0e09b1ee66fe478a7771e3ca6f3aaa05f00f6e068321d9e3"},
-]
-
-[package.dependencies]
-numpy = ">=1.22.0"
-
-[[package]]
 name = "python-dateutil"
 version = "2.9.0.post0"
 description = "Extensions to the standard Python datetime module"
@@ -658,4 +644,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "4b5ac8d6d7d6f9da059d99185c2d2141ec2a02970f43fa36cafd57938f430c17"
+content-hash = "6436b72d9b236224f2174961fb8b2118102d22e999598b98e22c212e90f832a3"

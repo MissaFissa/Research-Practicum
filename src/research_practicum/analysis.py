@@ -21,6 +21,3 @@ class Analysis:
             I_IL_15_200 = self.data.scaled_200[1][i] - self.data.scaled_200[2][i]
 
         self.abs_ref.append(R_ref * ((I_sample - I_sample_back) / (I_ref - I_ref_back)))
-    
-
-
