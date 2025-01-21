@@ -1,18 +1,17 @@
 import matplotlib.pyplot as plt 
 import click
-from research_practicum.data_gathering import DataGathering, Path, pd, np
+from research_practicum.data_gathering import DataGathering, np
 
 plt.rcParams.update({'font.size': 8})
 
 @click.command()
-@click.argument('figs')
+@click.argument('figs', required=False)
 def plot_tests(figs):
 
     filename_400 = 'data_400mu_csv/12_measurements_400mu'
     filename_200 = 'data_200mu_csv/12_measurements_200mu'
     filename = (f'{filename_400},{filename_200}')
     data = DataGathering(filename)
-    # data.gather_data()
 
     fig1, axs1 = plt.subplots(2, 1, figsize=(10, 8), facecolor='whitesmoke')
     fig1.set_label('fig1')
@@ -38,12 +37,12 @@ def plot_tests(figs):
         ax.set_xticks(minor_ticks_x, minor=True)
         ax.set_yticks(major_ticks_y)
         ax.set_yticks(minor_ticks_y, minor=True)
-        ax.grid(which='major', alpha=0.5, lw=.8, ls='--')
-        ax.grid(which='minor', alpha=0.3, lw=.6, ls='--')
+        ax.grid(which='major', alpha=0.8, lw=.8, ls='--')
+        ax.grid(which='minor', alpha=0.6, lw=.6, ls='--')
         ax.set_xlim(150, 1100)
         ax.set_ylim(0, 70000)
         ax.legend(prop={'size': 8})
-        ax.set_facecolor('dimgrey')
+        ax.set_facecolor('whitesmoke')
 
     axs1[0].set_title('400$\\mu$ fiber')
     axs1[1].set_title('200$\\mu$ fiber')
@@ -61,18 +60,7 @@ def plot_tests(figs):
 
     major_ticks_x_2 = np.arange(400, 950, 50)
     minor_ticks_x_2 = np.arange(400, 950, 10)
-    major_ticks_y_2_400 = np.arange(int(min(data.n_eff_400_15deg)), int(max(data.n_eff_400_15deg)) + 0.5, 0.5)
-    minor_ticks_y_2_400 = np.arange(int(min(data.n_eff_400_15deg)), int(max(data.n_eff_400_15deg)) + 0.5, 0.1)
-    major_ticks_y_2_200 = np.arange(int(min(data.n_eff_200_15deg)), int(max(data.n_eff_200_15deg)) + 0.5, 0.5)
-    minor_ticks_y_2_200 = np.arange(int(min(data.n_eff_200_15deg)), int(max(data.n_eff_200_15deg)) + 0.5, 0.1)
-
-    # axs2[0,0].set_yticks(major_ticks_y_2_400)
-    # axs2[0,0].set_yticks(minor_ticks_y_2_400, minor=True)
-    # axs2[0,1].set_yticks(major_ticks_y_2_200)
-    # axs2[0,1].set_yticks(minor_ticks_y_2_200, minor=True)
-    # axs2[0,0].set_ylim(int(min(data.n_eff_400_15deg)), int(max(data.n_eff_400_15deg)))
-    # axs2[0,1].set_ylim(int(min(data.n_eff_200_15deg)), int(max(data.n_eff_200_15deg)))
-
+ 
     for ax in axs2.flatten():
 
         ax.set_xlabel('Wavelength [nm]')
@@ -81,28 +69,28 @@ def plot_tests(figs):
         ax.set_xticks(major_ticks_x_2)
         ax.set_xticks(minor_ticks_x_2, minor=True)
 
-        ax.grid(which='major', alpha=0.5, lw=.8, ls='--')
-        ax.grid(which='minor', alpha=0.3, lw=.6, ls='--')
+        ax.grid(which='major', alpha=0.8, lw=.8, ls='--')
+        ax.grid(which='minor', alpha=0.6, lw=.6, ls='--')
         ax.set_xlim(400, 900)
-        ax.set_facecolor('dimgrey')
+        ax.set_facecolor('whitesmoke')
 
         axs2[0,0].title.set_text('$15\\degree$ $400\\mu$')
         axs2[0,1].title.set_text('$15\\degree$ $200\\mu$')
         axs2[1,0].title.set_text('$0\\degree$ $400\\mu$')
         axs2[1,1].title.set_text('$0\\degree$ $200\\mu$')
 
-    fig2.suptitle(f' {filename} ', fontsize=20)
+    fig2.suptitle(' Test data ', fontsize=14)
     plt.tight_layout()
     plt.margins(0)
 
-    for i in figs:
+    for i in figs or []:
 
         plt.close('fig'+i)
     
     plt.show()
 
 @click.command()
-@click.argument('figs')
+@click.argument('figs', required=False)
 def plot_bellyfat(figs):
 
     filename = 'data_experiment/bellyfat'
@@ -132,12 +120,12 @@ def plot_bellyfat(figs):
         ax.set_xticks(minor_ticks_x, minor=True)
         ax.set_yticks(major_ticks_y)
         ax.set_yticks(minor_ticks_y, minor=True)
-        ax.grid(which='major', alpha=0.5, lw=.8, ls='--')
-        ax.grid(which='minor', alpha=0.3, lw=.6, ls='--')
+        ax.grid(which='major', alpha=0.8, lw=.8, ls='--')
+        ax.grid(which='minor', alpha=0.6, lw=.6, ls='--')
         ax.set_xlim(150, 1100)
         ax.set_ylim(0, 70000)
         ax.legend(prop={'size': 8})
-        ax.set_facecolor('dimgrey')
+        ax.set_facecolor('whitesmoke')
 
     axs1[0].set_title('400$\\mu$ fiber')
     axs1[1].set_title('200$\\mu$ fiber')
@@ -164,28 +152,28 @@ def plot_bellyfat(figs):
         ax.set_xticks(minor_ticks_x, minor=True)
         ax.set_yticks(major_ticks_y)
         ax.set_yticks(minor_ticks_y, minor=True)
-        ax.grid(which='major', alpha=0.5, lw=.8, ls='--')
-        ax.grid(which='minor', alpha=0.3, lw=.6, ls='--')
+        ax.grid(which='major', alpha=0.8, lw=.8, ls='--')
+        ax.grid(which='minor', alpha=0.6, lw=.6, ls='--')
         ax.set_xlim(150, 1100)
         ax.set_ylim(0, 70000)
         ax.legend(loc='upper left', prop={'size': 8})
-        ax.set_facecolor('dimgrey')
+        ax.set_facecolor('whitesmoke')
     
     axs2[0].title.set_text('$15\\degree$ $400\\mu$')
     axs2[1].title.set_text('$15\\degree$ $200\\mu$')
+    fig2.suptitle(f' {filename} ', fontsize=14)
 
     plt.tight_layout()
     plt.margins(0)
-    fig2.suptitle(f' {filename} ', fontsize=20)
 
-    for i in figs:
+    for i in figs or []:
 
         plt.close('fig'+i)
     
     plt.show()
 
 @click.command()
-@click.argument('figs')
+@click.argument('figs', required=False)
 def plot_calibration(figs):
 
     filename = 'data_experiment/calibration'
@@ -216,12 +204,12 @@ def plot_calibration(figs):
         ax.set_xticks(minor_ticks_x, minor=True)
         ax.set_yticks(major_ticks_y)
         ax.set_yticks(minor_ticks_y, minor=True)
-        ax.grid(which='major', alpha=0.5, lw=.8, ls='--')
-        ax.grid(which='minor', alpha=0.3, lw=.6, ls='--')
+        ax.grid(which='major', alpha=0.8, lw=.8, ls='--')
+        ax.grid(which='minor', alpha=0.6, lw=.6, ls='--')
         ax.set_xlim(150, 1100)
         ax.set_ylim(0, 70000)
         ax.legend(prop={'size': 8})
-        ax.set_facecolor('dimgrey')
+        ax.set_facecolor('whitesmoke')
 
     axs1[0].set_title('400$\\mu$ fiber')
     axs1[1].set_title('200$\\mu$ fiber')
@@ -253,12 +241,12 @@ def plot_calibration(figs):
         ax.set_xticks(minor_ticks_x_2, minor=True)
         ax.set_yticks(major_ticks_y_2)
         ax.set_yticks(minor_ticks_y_2, minor=True)
-        ax.grid(which='major', alpha=0.5, lw=.8, ls='--')
-        ax.grid(which='minor', alpha=0.3, lw=.6, ls='--')
+        ax.grid(which='major', alpha=0.8, lw=.8, ls='--')
+        ax.grid(which='minor', alpha=0.6, lw=.6, ls='--')
         ax.set_xlim(400, 1100)
         ax.set_ylim(0, 70000)
         ax.legend(loc='upper left', prop={'size': 8})
-        ax.set_facecolor('dimgrey')
+        ax.set_facecolor('whitesmoke')
 
     fig2.suptitle(f' {filename} ', fontsize=20)
     plt.tight_layout()
@@ -292,10 +280,10 @@ def plot_calibration(figs):
         ax.set_xticks(major_ticks_x_3)
         ax.set_xticks(minor_ticks_x_3, minor=True)
 
-        ax.grid(which='major', alpha=0.5, lw=.8, ls='--')
-        ax.grid(which='minor', alpha=0.3, lw=.6, ls='--')
+        ax.grid(which='major', alpha=0.8, lw=.8, ls='--')
+        ax.grid(which='minor', alpha=0.6, lw=.6, ls='--')
         ax.set_xlim(400, 900)
-        ax.set_facecolor('dimgrey')
+        ax.set_facecolor('whitesmoke')
 
         axs3[0].title.set_text('$15\\degree$ $400\\mu$')
         axs3[1].title.set_text('$15\\degree$ $200\\mu$')
@@ -318,19 +306,19 @@ def plot_calibration(figs):
     axs4.set_xticks(minor_ticks_x_4, minor=True)
     axs4.set_yticks(major_ticks_y_4)
     axs4.set_yticks(minor_ticks_y_4, minor=True)
-    axs4.grid(which='major', alpha=0.5, lw=.8, ls='--')
-    axs4.grid(which='minor', alpha=0.3, lw=.6, ls='--')
+    axs4.grid(which='major', alpha=0.8, lw=.8, ls='--')
+    axs4.grid(which='minor', alpha=0.6, lw=.6, ls='--')
     axs4.set_xlim(400, 900)
     axs4.set_ylim(min(data.water_indices), max(data.water_indices))
     axs4.set_xlabel('Wavelength [nm]')
     axs4.set_ylabel('Refractive index')
-    axs4.set_facecolor('dimgrey')
+    axs4.set_facecolor('whitesmoke')
     fig4.suptitle(f' Water indices ', fontsize=20)
 
     plt.tight_layout()
     plt.margins(0) 
 
-    for i in figs:
+    for i in figs or []:
 
         plt.close('fig'+i)
     
