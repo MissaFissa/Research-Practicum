@@ -21,7 +21,9 @@ def plot_experiment(figs):
 
     major_ticks_x_1 = np.arange(400, 950, 50)
     minor_ticks_x_1 = np.arange(400, 950, 10)
- 
+    major_ticks_y_1 = np.arange(0, 0.040, 0.005)
+    minor_ticks_y_1 = np.arange(0, 0.040, 0.001)
+
     for ax in axs1.flatten():
 
         ax.set_xlabel('Wavelength [nm]')
@@ -29,10 +31,12 @@ def plot_experiment(figs):
 
         ax.set_xticks(major_ticks_x_1)
         ax.set_xticks(minor_ticks_x_1, minor=True)
-
+        ax.set_yticks(major_ticks_y_1)
+        ax.set_yticks(minor_ticks_y_1, minor=True)
         ax.grid(which='major', alpha=0.8, lw=.8, ls='--')
         ax.grid(which='minor', alpha=0.6, lw=.6, ls='--')
         ax.set_xlim(400, 900)
+        ax.set_ylim(0, 0.035)
         ax.set_facecolor('whitesmoke')
 
         axs1[0,0].title.set_text('Fat $15\\degree$ $400\\mu$')
@@ -54,7 +58,9 @@ def plot_experiment(figs):
 
     major_ticks_x_2 = np.arange(400, 950, 50)
     minor_ticks_x_2 = np.arange(400, 950, 10)
- 
+    major_ticks_y_2 = np.arange(0, 0.040, 0.005)
+    minor_ticks_y_2 = np.arange(0, 0.040, 0.001)
+
     for ax in axs2.flatten():
 
         ax.set_xlabel('Wavelength [nm]')
@@ -62,10 +68,12 @@ def plot_experiment(figs):
 
         ax.set_xticks(major_ticks_x_2)
         ax.set_xticks(minor_ticks_x_2, minor=True)
-
+        ax.set_yticks(major_ticks_y_2)
+        ax.set_yticks(minor_ticks_y_2, minor=True)
         ax.grid(which='major', alpha=0.8, lw=.8, ls='--')
         ax.grid(which='minor', alpha=0.6, lw=.6, ls='--')
         ax.set_xlim(400, 900)
+        ax.set_ylim(0, 0.035)
         ax.set_facecolor('whitesmoke')
 
         axs2[0,0].title.set_text('Fat $15\\degree$ $200\\mu$')
