@@ -1,12 +1,12 @@
 import matplotlib.pyplot as plt 
+import click
 from research_practicum.data_gathering import DataGathering, Path, pd, np
 
 plt.rcParams.update({'font.size': 8})
 
-
-def plot_tests():
-
-    figs_tests = ['fig1', 'fig2']
+@click.command()
+@click.argument('figs')
+def plot_tests(figs):
 
     filename_400 = 'data_400mu_csv/12_measurements_400mu'
     filename_200 = 'data_200mu_csv/12_measurements_200mu'
@@ -102,18 +102,22 @@ def plot_tests():
 
         axs2[0,0].title.set_text('$15\\degree$ $400\\mu$')
         axs2[0,1].title.set_text('$15\\degree$ $200\\mu$')
+        axs2[1,0].title.set_text('$0\\degree$ $400\\mu$')
+        axs2[1,1].title.set_text('$0\\degree$ $200\\mu$')
 
     fig2.suptitle(f' {filename} ', fontsize=20)
     plt.tight_layout()
     plt.margins(0)
 
-    # for i in figs_tests:
+    for i in figs:
 
-    #     plt.close(i)
-
+        plt.close('fig'+i)
+    
     plt.show()
 
-def plot_bellyfat():
+@click.command()
+@click.argument('figs')
+def plot_bellyfat(figs):
 
     figs_bellyfat = ['fig1', 'fig2']
 
@@ -191,13 +195,15 @@ def plot_bellyfat():
     plt.margins(0)
     fig2.suptitle(f' {filename} ', fontsize=20)
 
-    for i in figs_bellyfat:
+    for i in figs:
 
-        plt.close(i)
-
+        plt.close('fig'+i)
+    
     plt.show()
 
-def plot_calibration():
+@click.command()
+@click.argument('figs')
+def plot_calibration(figs):
 
     figs_calibration = ['fig1', 'fig2', 'fig3', 'fig4']
 
@@ -344,8 +350,8 @@ def plot_calibration():
     plt.tight_layout()
     plt.margins(0) 
 
-    for i in figs_calibration:
+    for i in figs:
 
-        plt.close(i)
-
+        plt.close('fig'+i)
+    
     plt.show()

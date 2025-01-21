@@ -151,9 +151,9 @@ class DataGathering():
             self.sellmeier()
 
             b = self.n_air
-    
+         
             if 'test' in self.filename:
-      
+                
                 for i in range(len(self.scaled_400[0])):
                     
                     c = self.water_indices[i]
@@ -181,7 +181,7 @@ class DataGathering():
                for i in range(len(self.scaled_400[0])):
                     
                     c = self.water_indices[i]
-
+                 
                     a_400_15_deg = (self.scaled_400[0][i] / self.scaled_400[2][i]) ** 0.5
                     n_eff_400_15deg = ((-1 * (c - b + a_400_15_deg * (c - b)) - ((c - b + a_400_15_deg * (c - b)) ** 2 + (4 * b * c * ((1 - a_400_15_deg) ** 2))) ** 0.5) / (2 * (1 - a_400_15_deg)))
 
