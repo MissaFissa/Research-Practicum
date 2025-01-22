@@ -12,6 +12,7 @@ class Analysis:
         exp = DataGathering(filename_experiment)
         self.n_air = test.n_air
         self.wavelengths_400nm = test.wavelengths_400nm
+        self.wavelength_635nm_index = test.wavelength_635nm_index
         self.scaled_400_test = test.scaled_400
         self.scaled_200_test = test.scaled_200
         self.scaled_400_exp = exp.scaled_400
@@ -64,8 +65,11 @@ class Analysis:
         
         for i in range(len(self.n_eff_400_0deg_test)):
 
-            I_IL_15_400 = self.scaled_400_test[self.good_400_test.index('400 mu 6 ms 0 deg IL')][i] - self.scaled_400_test[self.good_400_test.index('400 mu 107 ms 0 deg water')][i]
-            I_IL_15_200 = self.scaled_200_test[self.good_200_test.index('200 mu 5.1 ms 0 deg IL')][i] - self.scaled_200_test[self.good_200_test.index('200 mu 73 ms 0 deg water ')][i]
+            # I_IL_15_400 = self.scaled_400_test[self.good_400_test.index('400 mu 6 ms 0 deg IL')][i] - self.scaled_400_test[self.good_400_test.index('400 mu 107 ms 0 deg water')][i]
+            # I_IL_15_200 = self.scaled_200_test[self.good_200_test.index('200 mu 5.1 ms 0 deg IL')][i] - self.scaled_200_test[self.good_200_test.index('200 mu 73 ms 0 deg water ')][i]
+
+            I_IL_15_400 = self.scaled_400_test[self.good_400_test.index('400 mu 5.5 ms 15 deg IL')][i]
+            I_IL_15_200 = self.scaled_200_test[self.good_200_test.index('200 mu 4.5 ms 15 deg IL')][i]
 
             I_sample_400_fat = self.scaled_400_exp[self.good_400_exp.index('400 mu 36 ms 15 deg fat')][i]
             I_sample_400_muscle = self.scaled_400_exp[self.good_400_exp.index('400 mu 59 ms 15 deg muscle')][i]
@@ -86,5 +90,3 @@ class Analysis:
             self.R_muscle_200.append(self.ref_abs(self.R_IL_200[i], I_sample_200_muscle, I_IL_15_200))
             self.R_redmuscle_200.append(self.ref_abs(self.R_IL_200[i], I_sample_200_redmuscle, I_IL_15_200))
             self.R_skin_200.append(self.ref_abs(self.R_IL_200[i], I_sample_200_skin, I_IL_15_200))
-
-data = Analysis()

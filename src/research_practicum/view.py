@@ -3,7 +3,7 @@ import click
 from research_practicum.data_gathering import DataGathering, np
 from research_practicum.analysis import Analysis
 
-plt.rcParams.update({'font.size': 8})
+plt.rcParams.update({'font.size': 10})
 
 @click.command()
 @click.argument('figs', required=False)
@@ -18,7 +18,11 @@ def plot_experiment(figs):
     axs1[0,1].plot(analysis.wavelengths_400nm, analysis.R_muscle_400, c='dodgerblue', ls='dotted')
     axs1[1,0].plot(analysis.wavelengths_400nm, analysis.R_redmuscle_400, c='dodgerblue', ls='dotted')
     axs1[1,1].plot(analysis.wavelengths_400nm, analysis.R_skin_400, c='dodgerblue', ls='dotted')
-
+    axs1[0,0].plot(analysis.wavelengths_400nm.iloc[analysis.wavelength_635nm_index], analysis.R_fat_400[analysis.wavelength_635nm_index], c='red', marker='.')
+    axs1[0,1].plot(analysis.wavelengths_400nm.iloc[analysis.wavelength_635nm_index], analysis.R_muscle_400[analysis.wavelength_635nm_index], c='red', marker='.')
+    axs1[1,0].plot(analysis.wavelengths_400nm.iloc[analysis.wavelength_635nm_index], analysis.R_redmuscle_400[analysis.wavelength_635nm_index], c='red', marker='.')
+    axs1[1,1].plot(analysis.wavelengths_400nm.iloc[analysis.wavelength_635nm_index], analysis.R_skin_400[analysis.wavelength_635nm_index], c='red', marker='.')
+    
     major_ticks_x_1 = np.arange(400, 950, 50)
     minor_ticks_x_1 = np.arange(400, 950, 10)
     major_ticks_y_1 = np.arange(0, 0.040, 0.005)
@@ -27,7 +31,7 @@ def plot_experiment(figs):
     for ax in axs1.flatten():
 
         ax.set_xlabel('Wavelength [nm]')
-        ax.set_ylabel('Reflectance')
+        ax.set_ylabel('Measured absolute reflectance')
 
         ax.set_xticks(major_ticks_x_1)
         ax.set_xticks(minor_ticks_x_1, minor=True)
@@ -64,7 +68,7 @@ def plot_experiment(figs):
     for ax in axs2.flatten():
 
         ax.set_xlabel('Wavelength [nm]')
-        ax.set_ylabel('Reflectance')
+        ax.set_ylabel('Measured absolute reflectance')
 
         ax.set_xticks(major_ticks_x_2)
         ax.set_xticks(minor_ticks_x_2, minor=True)
@@ -82,6 +86,39 @@ def plot_experiment(figs):
         axs2[1,1].title.set_text('Skin $15\\degree$ $200\\mu$')
 
     fig2.suptitle(' Reflectance of different bellyfat parts ', fontsize=14)
+    plt.tight_layout()
+    plt.margins(0)
+
+    fig3, axs3 = plt.subplots(2, 1, figsize=(14, 8), facecolor='whitesmoke')
+    fig3.set_label('fig3')
+
+    axs3[0].plot(analysis.wavelengths_400nm, analysis.R_IL_400, c='dodgerblue', ls='dotted')
+    axs3[1].plot(analysis.wavelengths_400nm, analysis.R_IL_200, c='dodgerblue', ls='dotted')
+
+    major_ticks_x_3 = np.arange(400, 950, 50)
+    minor_ticks_x_3 = np.arange(400, 950, 10)
+    major_ticks_y_3 = np.arange(0, 0.055, 0.01)
+    minor_ticks_y_3 = np.arange(0, 0.055, 0.005)
+
+    for ax in axs3:
+
+        ax.set_xlabel('Wavelength [nm]')
+        ax.set_ylabel('Measured absolute reflectance')
+
+        ax.set_xticks(major_ticks_x_3)
+        ax.set_xticks(minor_ticks_x_3, minor=True)
+        ax.set_yticks(major_ticks_y_3)
+        ax.set_yticks(minor_ticks_y_3, minor=True)
+        ax.grid(which='major', alpha=0.8, lw=.8, ls='--')
+        ax.grid(which='minor', alpha=0.6, lw=.6, ls='--')
+        ax.set_xlim(400, 900)
+        ax.set_ylim(0, 0.05)
+        ax.set_facecolor('whitesmoke')
+
+    axs3[0].title.set_text('Intralipid $15\\degree$ $400\\mu$')
+    axs3[1].title.set_text('Intralipid $15\\degree$ $200\\mu$')
+
+    fig3.suptitle(' Measured absolute reflectance of Intralipid ', fontsize=14)
     plt.tight_layout()
     plt.margins(0)
 

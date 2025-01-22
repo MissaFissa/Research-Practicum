@@ -79,6 +79,7 @@ class DataGathering():
             self.t = self.info.iloc[0].to_list()
             self.wavelengths = self.df[self.dict[0]]
             self.wavelengths_400nm = self.df[self.dict[0]][self.index_wl400nm:]
+            self.wavelength_635nm_index = self.wavelengths_400nm[self.wavelengths_400nm == 635.098].index[0] - self.index_wl400nm
 
         else:
 
@@ -88,6 +89,7 @@ class DataGathering():
             self.t = self.info.iloc[0].to_list()
             self.wavelengths = self.df[self.dict[0]]
             self.wavelengths_400nm = self.df[self.dict[0]][self.index_wl400nm:]
+            self.wavelength_635nm_index = self.wavelengths_400nm[self.wavelengths_400nm == 635.098].index[0] - self.index_wl400nm
 
         self.split_dataframe()
 
