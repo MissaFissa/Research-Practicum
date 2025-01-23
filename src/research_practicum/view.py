@@ -191,8 +191,8 @@ def plot_tests(figs):
 
     major_ticks_x = np.arange(150, 1150, 50)
     minor_ticks_x = np.arange(150, 1150, 10)
-    major_ticks_y = np.arange(0, 75000, 5000)
-    minor_ticks_y = np.arange(0, 75000, 1000)
+    major_ticks_y = np.arange(0, 70000, 5000)
+    minor_ticks_y = np.arange(0, 70000, 1000)
 
     axs1[0].set_prop_cycle('color', plt.cm.jet(np.linspace(0, 1, 12)))
     axs1[1].set_prop_cycle('color', plt.cm.jet(np.linspace(0, 1, 12)))
@@ -213,7 +213,7 @@ def plot_tests(figs):
         ax.grid(which='major', alpha=0.8, lw=.8, ls='--')
         ax.grid(which='minor', alpha=0.6, lw=.6, ls='--')
         ax.set_xlim(150, 1100)
-        ax.set_ylim(0, 70000)
+        ax.set_ylim(0, 65000)
         ax.legend(prop={'size': 8})
         ax.set_facecolor('whitesmoke')
 
@@ -256,6 +256,50 @@ def plot_tests(figs):
     plt.tight_layout()
     plt.margins(0)
 
+    # fig3 = plt.figure(figsize=(12, 8), facecolor='whitesmoke')
+    # axs3 = fig3.axes
+    fig3, axs3 = plt.subplots(figsize=(14, 8), facecolor='whitesmoke')
+    fig3.set_label('fig3')
+
+    major_ticks_x_3 = np.arange(400, 1150, 50)
+    minor_ticks_x_3 = np.arange(400, 1150, 10)
+    major_ticks_y_3 = np.arange(0, 70000, 5000)
+    minor_ticks_y_3 = np.arange(0, 70000, 1000)
+
+    # axs3.set_prop_cycle('color', plt.cm.hsv(np.linspace(0, 1, 12)))
+    # axs3.set_prop_cycle('color', plt.cm.jet(np.linspace(0, 1, 12)))
+
+    # axs3.set_prop_cycle('color', plt.cm.tab20(range(12)))
+
+    # for i in range(len(data.dict_400)):
+
+        # axs3.plot(data.wavelengths, data.df_400[data.dict_400[i]], label=f'{data.dict_400[i]}')
+        # axs3[1].plot(data.wavelengths, data.df_200[data.dict_200[i]], label=f'{data.dict_200[i]}')
+
+    if ' mu' and ' deg' in data.dict_400[2]:
+        
+        label2 = data.dict_400[2].replace(' mu', '\u03BC')
+        label = label2.replace(' deg', '\u00b0')
+
+    axs3.plot(data.wavelengths, data.df_400[data.dict_400[2]], c='blue', label=f'{label}')
+
+    axs3.set_xlabel('Wavelength [nm]')
+    axs3.set_ylabel('Scope [ADC Counts]')
+    axs3.set_xticks(major_ticks_x_3)
+    axs3.set_xticks(minor_ticks_x_3, minor=True)
+    axs3.set_yticks(major_ticks_y_3)
+    axs3.set_yticks(minor_ticks_y_3, minor=True)
+    axs3.grid(which='major', alpha=0.8, lw=.8, ls='--')
+    axs3.grid(which='minor', alpha=0.6, lw=.6, ls='--')
+    axs3.set_xlim(400, 1100)
+    axs3.set_ylim(0, 65000)
+    axs3.legend(prop={'size': 12}, loc='upper left')
+    axs3.set_facecolor('whitesmoke')
+    axs3.set_title('400$\\mu$ fiber')
+
+    plt.tight_layout()
+    plt.margins(0)
+
     for i in figs or []:
 
         plt.close('fig'+i)
@@ -274,8 +318,8 @@ def plot_bellyfat(figs):
 
     major_ticks_x = np.arange(150, 1150, 50)
     minor_ticks_x = np.arange(150, 1150, 10)
-    major_ticks_y = np.arange(0, 75000, 5000)
-    minor_ticks_y = np.arange(0, 75000, 1000)
+    major_ticks_y = np.arange(0, 70000, 5000)
+    minor_ticks_y = np.arange(0, 70000, 1000)
 
     axs1[0].set_prop_cycle('color', plt.cm.jet(np.linspace(0, 1, 12)))
     axs1[1].set_prop_cycle('color', plt.cm.jet(np.linspace(0, 1, 12)))
@@ -296,7 +340,7 @@ def plot_bellyfat(figs):
         ax.grid(which='major', alpha=0.8, lw=.8, ls='--')
         ax.grid(which='minor', alpha=0.6, lw=.6, ls='--')
         ax.set_xlim(150, 1100)
-        ax.set_ylim(0, 70000)
+        ax.set_ylim(0, 65000)
         ax.legend(prop={'size': 8})
         ax.set_facecolor('whitesmoke')
 
@@ -328,7 +372,7 @@ def plot_bellyfat(figs):
         ax.grid(which='major', alpha=0.8, lw=.8, ls='--')
         ax.grid(which='minor', alpha=0.6, lw=.6, ls='--')
         ax.set_xlim(150, 1100)
-        ax.set_ylim(0, 70000)
+        ax.set_ylim(0, 65000)
         ax.legend(loc='upper left', prop={'size': 8})
         ax.set_facecolor('whitesmoke')
     
@@ -358,8 +402,8 @@ def plot_calibration(figs):
 
     major_ticks_x = np.arange(150, 1150, 50)
     minor_ticks_x = np.arange(150, 1150, 10)
-    major_ticks_y = np.arange(0, 75000, 5000)
-    minor_ticks_y = np.arange(0, 75000, 1000)
+    major_ticks_y = np.arange(0, 70000, 5000)
+    minor_ticks_y = np.arange(0, 70000, 1000)
 
     axs1[0].set_prop_cycle('color', plt.cm.jet(np.linspace(0, 1, 12)))
     axs1[1].set_prop_cycle('color', plt.cm.jet(np.linspace(0, 1, 12)))
@@ -380,7 +424,7 @@ def plot_calibration(figs):
         ax.grid(which='major', alpha=0.8, lw=.8, ls='--')
         ax.grid(which='minor', alpha=0.6, lw=.6, ls='--')
         ax.set_xlim(150, 1100)
-        ax.set_ylim(0, 70000)
+        ax.set_ylim(0, 65000)
         ax.legend(prop={'size': 8})
         ax.set_facecolor('whitesmoke')
 
@@ -395,8 +439,8 @@ def plot_calibration(figs):
 
     major_ticks_x_2 = np.arange(400, 1150, 50)
     minor_ticks_x_2 = np.arange(400, 1150, 10)
-    major_ticks_y_2 = np.arange(0, 75000, 5000)
-    minor_ticks_y_2 = np.arange(0, 75000, 1000)
+    major_ticks_y_2 = np.arange(0, 70000, 5000)
+    minor_ticks_y_2 = np.arange(0, 70000, 1000)
 
     axs2[0].set_prop_cycle('color', plt.cm.jet(np.linspace(0, 1, 6)))
     axs2[1].set_prop_cycle('color', plt.cm.jet(np.linspace(0, 1, 6)))
@@ -417,7 +461,7 @@ def plot_calibration(figs):
         ax.grid(which='major', alpha=0.8, lw=.8, ls='--')
         ax.grid(which='minor', alpha=0.6, lw=.6, ls='--')
         ax.set_xlim(400, 1100)
-        ax.set_ylim(0, 70000)
+        ax.set_ylim(0, 65000)
         ax.legend(loc='upper left', prop={'size': 8})
         ax.set_facecolor('whitesmoke')
 
