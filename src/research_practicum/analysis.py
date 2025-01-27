@@ -65,11 +65,11 @@ class Analysis:
         
         for i in range(len(self.n_eff_400_0deg_test)):
 
-            # I_IL_15_400 = self.scaled_400_test[self.good_400_test.index('400 mu 6 ms 0 deg IL')][i] - self.scaled_400_test[self.good_400_test.index('400 mu 107 ms 0 deg water')][i]
-            # I_IL_15_200 = self.scaled_200_test[self.good_200_test.index('200 mu 5.1 ms 0 deg IL')][i] - self.scaled_200_test[self.good_200_test.index('200 mu 73 ms 0 deg water ')][i]
+            I_IL_15_400 = self.scaled_400_test[self.good_400_test.index('400 mu 6 ms 0 deg IL')][i] - self.scaled_400_test[self.good_400_test.index('400 mu 107 ms 0 deg water')][i]
+            I_IL_15_200 = self.scaled_200_test[self.good_200_test.index('200 mu 5.1 ms 0 deg IL')][i] - self.scaled_200_test[self.good_200_test.index('200 mu 73 ms 0 deg water ')][i]
 
-            I_IL_15_400 = self.scaled_400_test[self.good_400_test.index('400 mu 5.5 ms 15 deg IL')][i]
-            I_IL_15_200 = self.scaled_200_test[self.good_200_test.index('200 mu 4.5 ms 15 deg IL')][i]
+            # I_IL_15_400 = self.scaled_400_test[self.good_400_test.index('400 mu 5.5 ms 15 deg IL')][i]
+            # I_IL_15_200 = self.scaled_200_test[self.good_200_test.index('200 mu 4.5 ms 15 deg IL')][i]
 
             I_sample_400_fat = self.scaled_400_exp[self.good_400_exp.index('400 mu 36 ms 15 deg fat')][i]
             I_sample_400_muscle = self.scaled_400_exp[self.good_400_exp.index('400 mu 59 ms 15 deg muscle')][i]

@@ -321,8 +321,8 @@ def plot_bellyfat(figs):
     major_ticks_y = np.arange(0, 70000, 5000)
     minor_ticks_y = np.arange(0, 70000, 1000)
 
-    axs1[0].set_prop_cycle('color', plt.cm.jet(np.linspace(0, 1, 12)))
-    axs1[1].set_prop_cycle('color', plt.cm.jet(np.linspace(0, 1, 12)))
+    axs1[0].set_prop_cycle('color', plt.cm.jet(np.linspace(0, 1, 8)))
+    axs1[1].set_prop_cycle('color', plt.cm.jet(np.linspace(0, 1, 8)))
 
     for i in range(len(data.dict_400)):
 
@@ -353,8 +353,8 @@ def plot_bellyfat(figs):
     fig2, axs2 = plt.subplots(2, 1, figsize=(14, 8), facecolor='whitesmoke')
     fig2.set_label('fig2')
 
-    axs2[0].set_prop_cycle('color', plt.cm.jet(np.linspace(0, 1, 6)))
-    axs2[1].set_prop_cycle('color', plt.cm.jet(np.linspace(0, 1, 6)))
+    axs2[0].set_prop_cycle('color', plt.cm.tab10(np.arange(0, 6, 1)))
+    axs2[1].set_prop_cycle('color', plt.cm.tab10(np.arange(0, 6, 1)))
 
     for i in range(len(data.scaled_400)):
 
