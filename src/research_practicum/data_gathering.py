@@ -168,6 +168,9 @@ class DataGathering():
             self.scaled_400.append(scale_factor_400 * self.corrected_400[i])
             self.scaled_200.append(scale_factor_200 * self.corrected_200[i])
 
+        self.scaled_200_dict = dict(enumerate(self.good_200))
+        self.scaled_400_dict = dict(enumerate(self.good_400))
+
         self.effective_index()
 
     def sellmeier(self):
