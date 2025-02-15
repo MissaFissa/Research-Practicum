@@ -200,7 +200,7 @@ class DataGathering():
 
                     n_eff_400_15deg = ((-1 * (c - b + a_400_15_deg * (c - b)) - ((c - b + a_400_15_deg * (c - b)) ** 2 + (4 * b * c * ((1 - a_400_15_deg) ** 2))) ** 0.5) / (2 * (1 - a_400_15_deg)))
                     n_eff_400_0deg = ((-1 * (c - b + a_400_0_deg * (c - b)) - ((c - b + a_400_0_deg * (c - b)) ** 2 + (4 * b * c * ((1 - a_400_0_deg) ** 2))) ** 0.5) / (2 * (1 - a_400_0_deg)))
-
+                    
                     self.n_eff_400_15deg.append(n_eff_400_15deg)
                     self.n_eff_400_0deg.append(n_eff_400_0deg)
 
